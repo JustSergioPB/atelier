@@ -12,16 +12,12 @@ on:
                 type: string
 
 concurrency:
-    group: vercel-production
+    group: cloudflare-production
     cancel-in-progress: false
 
 jobs:
     deploy:
         runs-on: ubuntu-latest
-        env:
-            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-            VTOKEN: ${{ secrets.VERCEL_TOKEN }}
         steps:
             - uses: actions/checkout@v6
               with:
@@ -36,6 +32,10 @@ jobs:
 
             - run: pnpm install --frozen-lockfile
 
-            - run: pnpm exec vercel pull --yes --environment=production --token=$VTOKEN
-            - run: pnpm exec vercel build --prod --token=$VTOKEN
-            - run: pnpm exec vercel deploy --prebuilt --prod --token=$VTOKEN
+            - run: pnpm run build
+
+            - uses: cloudflare/wrangler-action@v3
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  command: deploy

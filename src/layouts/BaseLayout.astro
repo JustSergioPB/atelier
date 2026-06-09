@@ -1,15 +1,15 @@
 ---
-import ThemeToggle from "../components/ThemeToggle.astro";
-import LangSwitcher from "../components/LangSwitcher.astro";
+import Header from "../components/Header.astro";
 import CookieBanner from "../components/CookieBanner.astro";
 import { getTranslations, htmlLang, resolveLang } from "../i18n/ui";
-import { MIDDOT } from "../separators";
-import { shared } from "../i18n/shared";
 import "../styles/global.css";
 
 interface Props {
   title?: string;
   description?: string;
+  // The nav header only belongs on the landing page (its anchors point at the
+  // home sections); other pages opt out.
+  header?: boolean;
 }
 
 const lang = resolveLang(Astro.currentLocale);
@@ -18,6 +18,7 @@ const t = getTranslations(lang);
 const {
   title = t.meta.title,
   description = t.meta.description,
+  header = false,
 } = Astro.props;
 ---
 
@@ -49,13 +50,7 @@ const {
     />
   </head>
   <body>
-    <header class="theme-bar">
-      <span class="theme-bar-label">{shared.name} {MIDDOT} <strong>{t.themeBar.location}</strong></span>
-      <div class="theme-bar-controls">
-        <LangSwitcher />
-        <ThemeToggle />
-      </div>
-    </header>
+    {header && <Header />}
 
     <main class="page">
       <slot />

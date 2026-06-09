@@ -1,0 +1,81 @@
+---
+import { getTranslations, resolveLang } from "../i18n/ui";
+
+interface Props {
+  // The id applied to the <ul>, so the burger button can reference it.
+  id?: string;
+  // "bar" = horizontal row (desktop header); "panel" = vertical (mobile sidebar).
+  variant?: "bar" | "panel";
+}
+
+const { id, variant = "bar" } = Astro.props;
+
+const lang = resolveLang(Astro.currentLocale);
+const t = getTranslations(lang);
+
+// The header only renders on the landing page, so plain hash anchors give us
+// same-document smooth scrolling (no navigation/reload).
+const items = [
+  { id: "about", label: t.about.label },
+  { id: "experience", label: t.experience.label },
+  { id: "projects", label: t.projects.label },
+  { id: "approach", label: t.approach.label },
+  { id: "ai", label: t.ai.label },
+  { id: "contact", label: t.contact.label },
+];
+---
+
+<ul class:list={["nav", `nav--${variant}`]} id={id}>
+  {
+    items.map((item) => (
+      <li>
+        <a class="nav-link" href={`#${item.id}`} data-nav-link>
+          {item.label}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .nav {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav--bar {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-m);
+  }
+
+  .nav--panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .nav-link {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: var(--t-label);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-text-tertiary);
+    transition: color 0.15s ease;
+  }
+
+  .nav--panel .nav-link {
+    font-size: var(--t-caption);
+    letter-spacing: 0.12em;
+  }
+
+  .nav-link:hover { color: var(--color-text-primary); }
+  .nav-link:focus-visible { outline: 2px solid var(--color-pop); outline-offset: 2px; }
+
+  /* Section currently in view — set by the scroll-spy in Header.astro. */
+  .nav-link[aria-current="true"] { color: var(--color-pop); }
+</style>

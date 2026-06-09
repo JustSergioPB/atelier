@@ -29,6 +29,10 @@ export const ui = {
       themeLabel: "Theme",
       langLabel: "Language",
     },
+    header: {
+      menu: "Menu",
+      close: "Close menu",
+    },
     hero: {
       eyebrow: ["Ideate", "Build", "Ship"],
       title: [
@@ -227,6 +231,10 @@ export const ui = {
       location: "España",
       themeLabel: "Color",
       langLabel: "Idioma",
+    },
+    header: {
+      menu: "Menú",
+      close: "Cerrar menú",
     },
     hero: {
       eyebrow: ["Idear", "Construir", "Desplegar"],

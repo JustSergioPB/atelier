@@ -9,9 +9,9 @@ const t = getTranslations(Astro.currentLocale).approach;
   <SectionHeader num="04" label={t.label} title={t.title} />
   <div class="approach-grid">
     {
-      t.items.map((item) => (
+      t.items.map((item, i) => (
         <div class="approach-item">
-          <div class="approach-num">{item.num}</div>
+          <div class="approach-num">{`P.0${i + 1}`}</div>
           <h3 class="approach-title">{item.title}</h3>
           <p class="approach-desc">{item.desc}</p>
         </div>

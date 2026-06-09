@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CookiePolicy from "../../components/CookiePolicy.astro";
+import { getTranslations, resolveLang } from "../../i18n/ui";
+
+const t = getTranslations(resolveLang(Astro.currentLocale)).cookies;
+---
+
+<BaseLayout title={t.meta.title} description={t.meta.description}>
+  <CookiePolicy />
+</BaseLayout>

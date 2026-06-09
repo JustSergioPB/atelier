@@ -15,14 +15,18 @@
 </div>
 
 <script>
+  import { getConsent, THEME_KEY, CONSENT_EVENT } from "../consent";
+
   // Theme control: light / dark / system (system follows the OS and updates live).
+  // The chosen theme always applies for the session; it is only *persisted*
+  // across visits once the visitor has accepted functional storage.
   (function () {
     var root = document.documentElement;
     var mq = window.matchMedia("(prefers-color-scheme: dark)");
     var opts = document.querySelectorAll(".theme-opt");
     var stored: string | null = null;
     try {
-      stored = localStorage.getItem("theme");
+      stored = localStorage.getItem(THEME_KEY);
     } catch (e) {}
     var mode = stored || "light";
 
@@ -37,11 +41,23 @@
     opts.forEach(function (b) {
       b.addEventListener("click", function () {
         mode = (b as HTMLElement).dataset.themeSet as string;
-        try {
-          localStorage.setItem("theme", mode);
-        } catch (e) {}
+        if (getConsent() === "accept") {
+          try {
+            localStorage.setItem(THEME_KEY, mode);
+          } catch (e) {}
+        }
         apply();
       });
+    });
+
+    // When the visitor accepts, remember the theme they're already on; the
+    // consent module clears it on reject, so nothing to do there.
+    window.addEventListener(CONSENT_EVENT, function (e) {
+      if ((e as CustomEvent).detail === "accept") {
+        try {
+          localStorage.setItem(THEME_KEY, mode);
+        } catch (err) {}
+      }
     });
 
     if (mq.addEventListener) {

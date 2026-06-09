@@ -147,6 +147,73 @@ export const ui = {
     },
     footer: {
       role: "Software Engineer",
+      cookies: "Cookie Policy",
+      cookieSettings: "Cookie settings",
+    },
+    cookieBanner: {
+      ariaLabel: "Cookie notice",
+      message:
+        "This site uses only strictly necessary storage to remember your theme and this choice. No tracking, no advertising.",
+      policyLink: "Cookie Policy",
+      accept: "Accept",
+      reject: "Reject",
+    },
+    cookies: {
+      meta: {
+        title: `Cookie Policy — ${shared.name}`,
+        description:
+          "How this site uses cookies and local storage. Only strictly necessary storage, no tracking or advertising.",
+      },
+      label: "Legal",
+      title: "Cookie Policy",
+      updated: "Last updated: June 2026",
+      back: "Back to home",
+      manage: "Change cookie settings",
+      intro: [
+        "This policy explains how this website uses cookies and similar browser storage. It is intentionally short, because this site stores very little.",
+      ],
+      sections: [
+        {
+          title: "What cookies and local storage are",
+          body: [
+            "Cookies are small text files a site can store in your browser. Local storage is a similar mechanism that keeps small values on your device. Both let a site remember information between visits.",
+          ],
+        },
+        {
+          title: "What this site stores",
+          body: [
+            "Only strictly necessary values, kept in your browser's local storage — never sent to a server:",
+          ],
+          items: [
+            "theme — your colour theme preference (light, dark, or system).",
+            "cookie-consent — your response to this notice, so it isn't shown again.",
+          ],
+        },
+        {
+          title: "What this site does not do",
+          body: [
+            "No analytics, no advertising, no third-party tracking, and no profiling. Your language is chosen from the page URL, not from a cookie.",
+          ],
+        },
+        {
+          title: "Third-party services",
+          body: [
+            "Fonts are loaded from Google Fonts. Google may receive your IP address to serve them, but this site sets no third-party cookies. See Google's privacy policy for details.",
+          ],
+        },
+        {
+          title: "Managing your choice",
+          body: [
+            "You can clear this site's storage at any time from your browser settings; the notice will appear again on your next visit. Because the stored values are strictly necessary for the site to remember your preferences, no functionality is lost by clearing them.",
+          ],
+        },
+        {
+          title: "Contact",
+          body: [
+            "Questions about this policy? Reach me by email at justsergioit@gmail.com.",
+          ],
+        },
+      ],
     },
   },
 
@@ -276,6 +343,73 @@ export const ui = {
     },
     footer: {
       role: "Ingeniero de software",
+      cookies: "Política de cookies",
+      cookieSettings: "Preferencias de cookies",
+    },
+    cookieBanner: {
+      ariaLabel: "Aviso de cookies",
+      message:
+        "Este sitio solo usa almacenamiento estrictamente necesario para recordar tu tema y esta elección. Sin rastreo ni publicidad.",
+      policyLink: "Política de cookies",
+      accept: "Aceptar",
+      reject: "Rechazar",
+    },
+    cookies: {
+      meta: {
+        title: `Política de cookies — ${shared.name}`,
+        description:
+          "Cómo usa este sitio las cookies y el almacenamiento local. Solo almacenamiento estrictamente necesario, sin rastreo ni publicidad.",
+      },
+      label: "Legal",
+      title: "Política de cookies",
+      updated: "Última actualización: junio de 2026",
+      back: "Volver al inicio",
+      manage: "Cambiar preferencias de cookies",
+      intro: [
+        "Esta política explica cómo este sitio web usa cookies y almacenamiento similar del navegador. Es deliberadamente breve, porque este sitio guarda muy poco.",
+      ],
+      sections: [
+        {
+          title: "Qué son las cookies y el almacenamiento local",
+          body: [
+            "Las cookies son pequeños archivos de texto que un sitio puede guardar en tu navegador. El almacenamiento local es un mecanismo similar que conserva valores pequeños en tu dispositivo. Ambos permiten que un sitio recuerde información entre visitas.",
+          ],
+        },
+        {
+          title: "Qué guarda este sitio",
+          body: [
+            "Solo valores estrictamente necesarios, guardados en el almacenamiento local de tu navegador — nunca se envían a un servidor:",
+          ],
+          items: [
+            "theme — tu preferencia de tema de color (claro, oscuro o sistema).",
+            "cookie-consent — tu respuesta a este aviso, para no volver a mostrarlo.",
+          ],
+        },
+        {
+          title: "Qué no hace este sitio",
+          body: [
+            "Sin analítica, sin publicidad, sin rastreo de terceros y sin perfilado. Tu idioma se elige desde la URL de la página, no desde una cookie.",
+          ],
+        },
+        {
+          title: "Servicios de terceros",
+          body: [
+            "Las fuentes se cargan desde Google Fonts. Google puede recibir tu dirección IP para servirlas, pero este sitio no establece cookies de terceros. Consulta la política de privacidad de Google para más detalles.",
+          ],
+        },
+        {
+          title: "Gestionar tu elección",
+          body: [
+            "Puedes borrar el almacenamiento de este sitio en cualquier momento desde la configuración de tu navegador; el aviso volverá a aparecer en tu próxima visita. Como los valores guardados son estrictamente necesarios para que el sitio recuerde tus preferencias, no se pierde ninguna funcionalidad al borrarlos.",
+          ],
+        },
+        {
+          title: "Contacto",
+          body: [
+            "¿Dudas sobre esta política? Escríbeme por correo a justsergioit@gmail.com.",
+          ],
+        },
+      ],
     },
   },
 } as const;

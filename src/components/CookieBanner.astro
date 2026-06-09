@@ -1,0 +1,176 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getTranslations, resolveLang } from "../i18n/ui";
+
+// Strictly-necessary storage only — the banner is informational. Both choices
+// dismiss it; the choice is persisted so it isn't shown again. Hidden by
+// default and revealed by the inline script only when no choice exists yet,
+// so it never flashes for returning visitors.
+const lang = resolveLang(Astro.currentLocale);
+const t = getTranslations(lang).cookieBanner;
+const policyHref = getRelativeLocaleUrl(lang, "cookies");
+---
+
+<div class="cookie-banner" id="cookie-banner" role="dialog" aria-label={t.ariaLabel} aria-live="polite" hidden>
+  <p class="cookie-banner-text">
+    {t.message}{" "}
+    <a href={policyHref}>{t.policyLink}</a>
+  </p>
+  <div class="cookie-banner-actions">
+    <button type="button" class="cookie-btn cookie-btn-ghost" data-cookie-choice="reject">{t.reject}</button>
+    <button type="button" class="cookie-btn cookie-btn-primary" data-cookie-choice="accept">{t.accept}</button>
+  </div>
+</div>
+
+<script>
+  import { getConsent, setConsent } from "../consent";
+
+  (function () {
+    var banner = document.getElementById("cookie-banner");
+    if (!banner) return;
+
+    // Highlight the visitor's current choice (relevant when reopened later).
+    function reflect() {
+      var current = getConsent();
+      banner.querySelectorAll("[data-cookie-choice]").forEach(function (el) {
+        var choice = el.getAttribute("data-cookie-choice");
+        el.setAttribute("aria-pressed", String(choice === current));
+      });
+    }
+
+    function open() {
+      reflect();
+      banner.hidden = false;
+    }
+
+    // First visit (no choice yet) → prompt. Otherwise stay hidden until asked.
+    if (getConsent() === null) open();
+    else reflect();
+
+    banner.querySelectorAll("[data-cookie-choice]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var choice = el.getAttribute("data-cookie-choice");
+        setConsent(choice === "accept" ? "accept" : "reject");
+        reflect();
+        banner.hidden = true;
+      });
+    });
+
+    // Any "Cookie settings" trigger on the page reopens the banner so the
+    // visitor can change their choice.
+    document.addEventListener("click", function (e) {
+      var target = e.target instanceof Element ? e.target.closest("[data-cookie-settings]") : null;
+      if (target) {
+        e.preventDefault();
+        open();
+      }
+    });
+  })();
+</script>
+
+<style>
+  .cookie-banner {
+    position: fixed;
+    left: var(--space-s);
+    right: var(--space-s);
+    bottom: var(--space-s);
+    z-index: 200;
+    margin: 0 auto;
+    max-width: 720px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: var(--space-s) var(--space-m);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+  }
+
+  .cookie-banner[hidden] {
+    display: none;
+  }
+
+  .cookie-banner-text {
+    font-family: "Inter", sans-serif;
+    font-size: var(--t-caption);
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    flex: 1 1 300px;
+    margin: 0;
+  }
+
+  .cookie-banner-text a {
+    color: var(--color-pop);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .cookie-banner-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    flex-shrink: 0;
+  }
+
+  .cookie-btn {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: var(--t-label);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 9px 16px;
+    border-radius: 2px;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .cookie-btn-primary {
+    background: var(--color-pop);
+    color: #fff;
+    border: 1px solid var(--color-pop);
+  }
+  .cookie-btn-primary:hover {
+    background: var(--color-pop-deep);
+    border-color: var(--color-pop-deep);
+  }
+
+  .cookie-btn-ghost {
+    background: transparent;
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+  }
+  .cookie-btn-ghost:hover {
+    border-color: var(--color-pop);
+    color: var(--color-pop);
+  }
+
+  .cookie-btn:focus-visible {
+    outline: 2px solid var(--color-pop);
+    outline-offset: 2px;
+  }
+
+  /* Marks the visitor's current choice when the banner is reopened. */
+  .cookie-btn-ghost[aria-pressed="true"] {
+    border-color: var(--color-pop);
+    color: var(--color-pop);
+  }
+  .cookie-btn[aria-pressed="true"] {
+    box-shadow: inset 0 0 0 1px var(--color-pop);
+  }
+
+  @media (max-width: 640px) {
+    .cookie-banner {
+      padding: var(--space-s);
+    }
+    .cookie-banner-actions {
+      width: 100%;
+    }
+    .cookie-btn {
+      flex: 1;
+    }
+  }
+</style>

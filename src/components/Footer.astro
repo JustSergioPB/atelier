@@ -1,14 +1,55 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import Icon from "./Icon.astro";
-import { getTranslations } from "../i18n/ui";
+import { getTranslations, resolveLang } from "../i18n/ui";
 import { MIDDOT } from "../separators";
 import { contact } from "../contact";
 import { shared } from "../i18n/shared";
 
-const t = getTranslations(Astro.currentLocale).footer;
+const lang = resolveLang(Astro.currentLocale);
+const t = getTranslations(lang).footer;
+const cookiesHref = getRelativeLocaleUrl(lang, "cookies");
 ---
 
 <footer class="footer">
   <span class="footer-text">{shared.name} {MIDDOT} {t.role}</span>
-  <a class="footer-text" href={contact.linkedin} target="_blank" rel="noopener">{shared.brand.linkedin} <Icon name="arrowUpRight" /></a>
+  <div class="footer-links">
+    <button type="button" class="footer-text footer-btn" data-cookie-settings>{t.cookieSettings}</button>
+    <a class="footer-text" href={cookiesHref}>{t.cookies}</a>
+    <a class="footer-text" href={contact.linkedin} target="_blank" rel="noopener">{shared.brand.linkedin} <Icon name="arrowUpRight" /></a>
+  </div>
 </footer>
+
+<style>
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    flex-wrap: wrap;
+  }
+
+  /* A button styled as a footer link — reopens the cookie banner.
+     appearance:none strips the native button look so it inherits the
+     .footer-text typography (font, uppercase, letter-spacing) like the links. */
+  .footer-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    line-height: inherit;
+    cursor: pointer;
+    color: var(--color-pop);
+    transition: color 0.15s ease;
+  }
+  .footer-btn:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+  .footer-btn:focus-visible {
+    outline: 2px solid var(--color-pop);
+    outline-offset: 2px;
+  }
+</style>

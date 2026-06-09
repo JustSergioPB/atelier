@@ -1,6 +1,7 @@
 ---
 import ThemeToggle from "../components/ThemeToggle.astro";
 import LangSwitcher from "../components/LangSwitcher.astro";
+import CookieBanner from "../components/CookieBanner.astro";
 import { getTranslations, htmlLang, resolveLang } from "../i18n/ui";
 import { MIDDOT } from "../separators";
 import { shared } from "../i18n/shared";
@@ -58,6 +59,8 @@ const {
     <main class="page">
       <slot />
     </main>
+
+    <CookieBanner />
 
     <script>
       // Motion as progressive enhancement — content is fully visible without this.

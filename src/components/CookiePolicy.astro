@@ -1,0 +1,188 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getTranslations, resolveLang } from "../i18n/ui";
+
+const lang = resolveLang(Astro.currentLocale);
+const t = getTranslations(lang).cookies;
+const homeHref = getRelativeLocaleUrl(lang);
+---
+
+<article class="legal">
+  <header class="legal-header">
+    <p class="section-label">{t.label}</p>
+    <h1 class="legal-title">{t.title}</h1>
+    <p class="legal-updated">{t.updated}</p>
+  </header>
+
+  {t.intro.map((p) => <p class="legal-lead">{p}</p>)}
+
+  {
+    t.sections.map((s) => (
+      <div class="legal-section">
+        <h2 class="legal-section-title">{s.title}</h2>
+        {s.body.map((p) => (
+          <p class="legal-body">{p}</p>
+        ))}
+        {"items" in s && s.items && (
+          <ul class="legal-list">
+            {s.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    ))
+  }
+
+  <p class="legal-manage">
+    <button type="button" class="legal-manage-btn" data-cookie-settings>{t.manage}</button>
+  </p>
+
+  <a class="legal-back" href={homeHref}>← {t.back}</a>
+</article>
+
+<style>
+  .legal {
+    max-width: 720px;
+  }
+
+  .legal-header {
+    margin-bottom: var(--space-l);
+  }
+
+  .legal-title {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: var(--t-headline);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--color-text-primary);
+    margin: var(--space-xs) 0;
+  }
+
+  .legal-updated {
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: var(--t-caption);
+    color: var(--color-text-tertiary);
+  }
+
+  .legal-lead {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-l);
+  }
+
+  .legal-section {
+    padding: var(--space-m) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .legal-section-title {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-s);
+  }
+
+  .legal-body {
+    font-family: "Inter", sans-serif;
+    font-size: var(--t-body);
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--color-text-tertiary);
+  }
+
+  .legal-body + .legal-body {
+    margin-top: var(--space-s);
+  }
+
+  .legal-list {
+    list-style: none;
+    margin-top: var(--space-s);
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .legal-list li {
+    position: relative;
+    padding-left: var(--space-s);
+    font-family: "Inter", sans-serif;
+    font-size: var(--t-body);
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--color-text-tertiary);
+  }
+
+  .legal-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-pop);
+  }
+
+  .legal-list li code,
+  .legal-list li {
+    font-variant-ligatures: none;
+  }
+
+  .legal-manage {
+    margin-top: var(--space-l);
+  }
+
+  .legal-manage-btn {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: var(--t-label);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    padding: 9px 16px;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .legal-manage-btn:hover {
+    border-color: var(--color-pop);
+    color: var(--color-pop);
+  }
+  .legal-manage-btn:focus-visible {
+    outline: 2px solid var(--color-pop);
+    outline-offset: 2px;
+  }
+
+  .legal-back {
+    display: inline-block;
+    margin-top: var(--space-m);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: var(--t-label);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-pop);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .legal-back:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+
+  .legal-back:focus-visible {
+    outline: 2px solid var(--color-pop);
+    outline-offset: 2px;
+  }
+</style>

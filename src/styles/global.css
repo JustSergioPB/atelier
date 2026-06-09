@@ -219,7 +219,21 @@ section:not(:first-of-type)::before {
 /* ─────────────────────────────────────────
    HERO
 ───────────────────────────────────────── */
-.hero { padding: 0 0 var(--space-l); border-top: none; }
+.hero { position: relative; padding: 0 0 var(--space-l); border-top: none; }
+
+.hero-photo {
+  position: absolute;
+  right: 0;
+  bottom: var(--space-l);
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 720px) {
+  .hero-photo { position: static; margin-top: var(--space-m); width: 96px; height: 96px; }
+}
 
 .hero-eyebrow {
   font-family: "Space Grotesk", sans-serif;

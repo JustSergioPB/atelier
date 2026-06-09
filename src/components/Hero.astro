@@ -20,4 +20,5 @@ const t = getTranslations(Astro.currentLocale).hero;
     <a class="btn btn-primary" href="#contact">{t.ctaPrimary} <Icon name="arrowRight" /></a>
     <a class="btn btn-ghost" href={contact.linkedin} target="_blank" rel="noopener">{t.ctaSecondary}</a>
   </div>
+  <img class="hero-photo" src="/profile-pic.webp" alt={shared.name} width="160" height="160" loading="eager" />
 </section>

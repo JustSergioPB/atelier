@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.1.0...atelier-v0.2.0) (2026-06-09)
+
+
+### Features
+
+* favicon + external styles ([25ca1a0](https://github.com/JustSergioPB/atelier/commit/25ca1a0f90fe94909c7ecd350f6890628b3fd40b))
+* updated copy ([ee7a374](https://github.com/JustSergioPB/atelier/commit/ee7a3742f4da7bc15965eb70cd52b4911138ad92))
+
 ## [0.1.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.0.1...atelier-v0.1.0) (2026-06-09)
 
 

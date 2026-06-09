@@ -1,0 +1,41 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+
+interface AiEntry {
+  term: string;
+  desc: string;
+}
+
+const entries: AiEntry[] = [
+  {
+    term: "Skills",
+    desc: "I package domain knowledge and repeatable procedures into skills, so an AI agent follows the proven path instead of improvising. The expertise lives in version control, not in one person's head or a throwaway chat.",
+  },
+  {
+    term: "Harnesses",
+    desc: "I build the scaffolding around the model — the tools, guardrails, and checks it runs inside — so it produces correct, verifiable output and does dependable work rather than one-off demos.",
+  },
+  {
+    term: "Documented context",
+    desc: "I write code and documentation that hand an AI the context it needs to reason correctly: clear structure, explicit contracts, and the why behind decisions. The same clarity that helps a model helps the humans who maintain it.",
+  },
+];
+---
+
+<section id="ai">
+  <SectionHeader num="05" label="Working with AI" title="Setting AI up to do real work" />
+  <p class="ai-lead">
+    AI changes how software gets built, not whether it needs to be built <span class="accent"
+      >well</span
+    >. Most of the value isn't in the prompt — it's in the engineering that lets a model work
+    reliably on a real codebase.
+  </p>
+  {
+    entries.map((item) => (
+      <div class="ai-item">
+        <div class="ai-term">{item.term}</div>
+        <p class="ai-desc">{item.desc}</p>
+      </div>
+    ))
+  }
+</section>

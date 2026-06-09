@@ -1,0 +1,89 @@
+---
+// Self-contained light / dark / system theme switch.
+---
+
+<div class="theme-toggle" role="group" aria-label="Color theme">
+  <button class="theme-opt" data-theme-set="light" aria-label="Light theme" title="Light">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+  </button>
+  <button class="theme-opt" data-theme-set="dark" aria-label="Dark theme" title="Dark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+  </button>
+  <button class="theme-opt" data-theme-set="system" aria-label="System theme" title="System">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg>
+  </button>
+</div>
+
+<script>
+  // Theme control: light / dark / system (system follows the OS and updates live).
+  (function () {
+    var root = document.documentElement;
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    var opts = document.querySelectorAll(".theme-opt");
+    var stored: string | null = null;
+    try {
+      stored = localStorage.getItem("theme");
+    } catch (e) {}
+    var mode = stored || "light";
+
+    function apply() {
+      var resolved = mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+      root.setAttribute("data-theme", resolved);
+      opts.forEach(function (b) {
+        b.setAttribute("aria-pressed", String((b as HTMLElement).dataset.themeSet === mode));
+      });
+    }
+
+    opts.forEach(function (b) {
+      b.addEventListener("click", function () {
+        mode = (b as HTMLElement).dataset.themeSet as string;
+        try {
+          localStorage.setItem("theme", mode);
+        } catch (e) {}
+        apply();
+      });
+    });
+
+    if (mq.addEventListener) {
+      mq.addEventListener("change", function () { if (mode === "system") apply(); });
+    } else if ((mq as any).addListener) {
+      (mq as any).addListener(function () { if (mode === "system") apply(); });
+    }
+
+    apply();
+  })();
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 2px;
+  }
+
+  .theme-opt {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    border-radius: 3px;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .theme-opt svg { width: 14px; height: 14px; display: block; }
+  .theme-opt:hover { color: var(--color-text-secondary); }
+  .theme-opt[aria-pressed="true"] {
+    background: var(--color-surface-raised);
+    color: var(--color-text-primary);
+  }
+  .theme-opt:focus-visible { outline: 2px solid var(--color-pop); outline-offset: 2px; }
+</style>

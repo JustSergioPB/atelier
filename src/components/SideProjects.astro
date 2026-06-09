@@ -1,0 +1,45 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+
+interface ProjectEntry {
+  meta: string;
+  title: string;
+  desc: string;
+  tags: string[];
+  link?: string;
+}
+
+// Duplicate an entry per project. Drop `link` if there's no URL.
+const projects: ProjectEntry[] = [
+  {
+    meta: "Side Project · Year",
+    title: "Project name",
+    desc: "One or two sentences: what it does, the problem it solves, and the interesting engineering decision behind it. Side projects are where you get to show range, so lead with what makes this one yours.",
+    tags: ["Tech", "Tech"],
+    link: "#",
+  },
+];
+---
+
+<section id="projects">
+  <SectionHeader num="03" label="Side Projects" title="Experiments & side projects" />
+  {
+    projects.map((item) => (
+      <div class="exp-item">
+        <div class="exp-meta">{item.meta}</div>
+        <div class="exp-title">{item.title}</div>
+        <p class="exp-desc">{item.desc}</p>
+        <div class="exp-tags">
+          {item.tags.map((tag) => (
+            <span class="exp-tag">{tag}</span>
+          ))}
+        </div>
+        {item.link && (
+          <a class="exp-link" href={item.link} target="_blank" rel="noopener">
+            View project ↗
+          </a>
+        )}
+      </div>
+    ))
+  }
+</section>

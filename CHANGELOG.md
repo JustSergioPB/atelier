@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.2.0...atelier-v0.3.0) (2026-06-09)
+
+
+### Features
+
+* added 404 page ([7d9c482](https://github.com/JustSergioPB/atelier/commit/7d9c482bb2affd64af30afed2ad37222f0ce8d2e))
+* reusing cookies email ([fac656c](https://github.com/JustSergioPB/atelier/commit/fac656cf6dc4c67e1031dd1a1c2d8e5094b7638a))
+
 ## [0.2.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.1.0...atelier-v0.2.0) (2026-06-09)
 
 

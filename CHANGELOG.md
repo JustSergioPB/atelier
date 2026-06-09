@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.3.0...atelier-v0.4.0) (2026-06-09)
+
+
+### Features
+
+* added profile pic ([7a40025](https://github.com/JustSergioPB/atelier/commit/7a40025f3ebafcf49b25bc3007f71f3cf8d8cfd4))
+* added sidebar ([3059853](https://github.com/JustSergioPB/atelier/commit/305985395cdc4452c0cc8c0c1506659a7be02a52))
+
 ## [0.3.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.2.0...atelier-v0.3.0) (2026-06-09)
 
 

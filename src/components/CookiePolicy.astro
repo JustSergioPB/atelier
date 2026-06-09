@@ -1,10 +1,14 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getTranslations, resolveLang } from "../i18n/ui";
+import { contact, mailto } from "../contact";
 
 const lang = resolveLang(Astro.currentLocale);
 const t = getTranslations(lang).cookies;
 const homeHref = getRelativeLocaleUrl(lang);
+
+// Split a paragraph around the contact email so it can be highlighted.
+const splitEmail = (p: string) => p.split(contact.email);
 ---
 
 <article class="legal">
@@ -20,9 +24,19 @@ const homeHref = getRelativeLocaleUrl(lang);
     t.sections.map((s) => (
       <div class="legal-section">
         <h2 class="legal-section-title">{s.title}</h2>
-        {s.body.map((p) => (
-          <p class="legal-body">{p}</p>
-        ))}
+        {s.body.map((p) =>
+          p.includes(contact.email) ? (
+            <p class="legal-body">
+              {splitEmail(p)[0]}
+              <a class="legal-email" href={mailto}>
+                {contact.email}
+              </a>
+              {splitEmail(p)[1]}
+            </p>
+          ) : (
+            <p class="legal-body">{p}</p>
+          )
+        )}
         {"items" in s && s.items && (
           <ul class="legal-list">
             {s.items.map((item) => (
@@ -100,6 +114,16 @@ const homeHref = getRelativeLocaleUrl(lang);
 
   .legal-body + .legal-body {
     margin-top: var(--space-s);
+  }
+
+  .legal-email {
+    color: var(--color-pop);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .legal-email:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .legal-list {

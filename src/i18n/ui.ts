@@ -2,6 +2,7 @@
 // Read it in components with `getTranslations(Astro.currentLocale)`.
 // Language-invariant text (name, tech names, …) comes from ./shared.
 
+import { contact } from "../contact";
 import { shared } from "./shared";
 
 export const defaultLang = "es";
@@ -211,7 +212,7 @@ export const ui = {
         {
           title: "Contact",
           body: [
-            "If you have any questions about how this site is managed, feel free to reach out directly at justsergioit@gmail.com.",
+            `If you have any questions about how this site is managed, feel free to reach out directly at ${contact.email}.`,
           ],
         },
       ],
@@ -410,7 +411,7 @@ export const ui = {
         {
           title: "Contacto",
           body: [
-            "Si tienes cualquier duda sobre cómo se gestiona esta web, puedes escribirme directamente a justsergioit@gmail.com.",
+            `Si tienes cualquier duda sobre cómo se gestiona esta web, puedes escribirme directamente a ${contact.email}.`,
           ],
         },
       ],

@@ -5,6 +5,17 @@ import { languages, getTranslations, resolveLang } from "../i18n/ui";
 const current = resolveLang(Astro.currentLocale);
 const label = getTranslations(current).themeBar.langLabel;
 const locales = Object.keys(languages) as Array<keyof typeof languages>;
+
+// Keep the visitor on the same page when switching language: strip the current
+// locale prefix off the path and re-prefix it for each target locale.
+const prefixes: Record<keyof typeof languages, string> = { es: "", en: "/en" };
+const currentPrefix = prefixes[current];
+const pathname = Astro.url.pathname;
+const rest =
+  currentPrefix && (pathname === currentPrefix || pathname.startsWith(currentPrefix + "/"))
+    ? pathname.slice(currentPrefix.length)
+    : pathname;
+const slug = rest.replace(/^\/+/, "").replace(/\/+$/, "");
 ---
 
 <div class="lang-switcher" role="group" aria-label={label}>
@@ -12,7 +23,7 @@ const locales = Object.keys(languages) as Array<keyof typeof languages>;
     locales.map((locale) => (
       <a
         class="lang-opt"
-        href={getRelativeLocaleUrl(locale)}
+        href={getRelativeLocaleUrl(locale, slug)}
         hreflang={locale}
         aria-current={locale === current ? "true" : undefined}
       >

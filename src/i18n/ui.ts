@@ -144,6 +144,19 @@ export const ui = {
       cookies: "Cookies",
       cookieSettings: "Settings",
     },
+    notFound: {
+      meta: {
+        title: `Page not found — ${shared.name}`,
+        description: "This page doesn't exist. Head back to the homepage.",
+      },
+      label: "Error 404",
+      title: [
+        { text: "This page got " },
+        { text: "lost", mark: true },
+      ],
+      lead: "The page you're looking for doesn't exist, moved, or never did. Nothing to see here.",
+      home: "Back to home",
+    },
     cookieBanner: {
       ariaLabel: "Cookie notice",
       message:
@@ -329,6 +342,19 @@ export const ui = {
       role: "Ingeniero de software",
       cookies: "Cookies",
       cookieSettings: "Configuración",
+    },
+    notFound: {
+      meta: {
+        title: `Página no encontrada — ${shared.name}`,
+        description: "Esta página no existe. Vuelve a la página de inicio.",
+      },
+      label: "Error 404",
+      title: [
+        { text: "Esta página se ha " },
+        { text: "perdido", mark: true },
+      ],
+      lead: "La página que buscas no existe, se movió o nunca estuvo aquí. No hay nada que ver.",
+      home: "Volver al inicio",
     },
     cookieBanner: {
       ariaLabel: "Aviso de cookies",

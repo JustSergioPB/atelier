@@ -1,21 +1,20 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
+import Icon from "./Icon.astro";
+import { getTranslations } from "../i18n/ui";
+import { joinMiddot } from "../separators";
+import { contact, mailto } from "../contact";
 
-const email = "justsergioit@gmail.com";
-const linkedin = "https://www.linkedin.com/in/sergio-pe%C3%B1a-bayona-297308128/";
+const t = getTranslations(Astro.currentLocale).contact;
 ---
 
 <section id="contact">
-  <SectionHeader num="06" label="Contact" title="Let's work together" />
-  <p class="contact-lead">
-    Whether you're hiring for a role or have a project that needs an engineer, I'm open to both.
-  </p>
-  <p class="contact-sub">
-    The quickest way to reach me is email or LinkedIn — whichever you prefer.
-  </p>
+  <SectionHeader num="06" label={t.label} title={t.title} />
+  <p class="contact-lead">{t.lead}</p>
+  <p class="contact-sub">{t.sub}</p>
   <div class="hero-actions">
-    <a class="btn btn-primary" href={`mailto:${email}`}>Email me →</a>
-    <a class="btn btn-ghost" href={linkedin} target="_blank" rel="noopener">Connect on LinkedIn</a>
+    <a class="btn btn-primary" href={mailto}>{t.emailCta} <Icon name="arrowRight" /></a>
+    <a class="btn btn-ghost" href={contact.linkedin} target="_blank" rel="noopener">{t.linkedinCta}</a>
   </div>
-  <p class="contact-note">Based in Spain · Open to full-time roles and project work.</p>
+  <p class="contact-note">{joinMiddot(t.note)}</p>
 </section>

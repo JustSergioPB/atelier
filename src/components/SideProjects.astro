@@ -1,32 +1,18 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
+import Icon from "./Icon.astro";
+import { getTranslations } from "../i18n/ui";
+import { joinMiddot } from "../separators";
 
-interface ProjectEntry {
-  meta: string;
-  title: string;
-  desc: string;
-  tags: string[];
-  link?: string;
-}
-
-// Duplicate an entry per project. Drop `link` if there's no URL.
-const projects: ProjectEntry[] = [
-  {
-    meta: "Side Project · Year",
-    title: "Project name",
-    desc: "One or two sentences: what it does, the problem it solves, and the interesting engineering decision behind it. Side projects are where you get to show range, so lead with what makes this one yours.",
-    tags: ["Tech", "Tech"],
-    link: "#",
-  },
-];
+const t = getTranslations(Astro.currentLocale).projects;
 ---
 
 <section id="projects">
-  <SectionHeader num="03" label="Side Projects" title="Experiments & side projects" />
+  <SectionHeader num="03" label={t.label} title={t.title} />
   {
-    projects.map((item) => (
+    t.items.map((item) => (
       <div class="exp-item">
-        <div class="exp-meta">{item.meta}</div>
+        <div class="exp-meta">{joinMiddot(item.meta)}</div>
         <div class="exp-title">{item.title}</div>
         <p class="exp-desc">{item.desc}</p>
         <div class="exp-tags">
@@ -36,7 +22,7 @@ const projects: ProjectEntry[] = [
         </div>
         {item.link && (
           <a class="exp-link" href={item.link} target="_blank" rel="noopener">
-            View project ↗
+            {t.viewProject} <Icon name="arrowUpRight" />
           </a>
         )}
       </div>

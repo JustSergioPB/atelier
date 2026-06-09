@@ -1,19 +1,26 @@
 ---
 import ThemeToggle from "../components/ThemeToggle.astro";
+import LangSwitcher from "../components/LangSwitcher.astro";
+import { getTranslations, htmlLang, resolveLang } from "../i18n/ui";
+import { MIDDOT } from "../separators";
+import { shared } from "../i18n/shared";
 
 interface Props {
   title?: string;
   description?: string;
 }
 
+const lang = resolveLang(Astro.currentLocale);
+const t = getTranslations(lang);
+
 const {
-  title = "Sergio Peña Bayona — Software Engineer",
-  description = "Sergio Peña Bayona — Software Engineer based in Spain. Almost seven years solving problems across the full stack, adapting to whatever each project needs.",
+  title = t.meta.title,
+  description = t.meta.description,
 } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang={htmlLang[lang]} data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <script is:inline>
@@ -41,8 +48,11 @@ const {
   </head>
   <body>
     <header class="theme-bar">
-      <span class="theme-bar-label">Sergio Peña Bayona · <strong>Spain</strong></span>
-      <ThemeToggle />
+      <span class="theme-bar-label">{shared.name} {MIDDOT} <strong>{t.themeBar.location}</strong></span>
+      <div class="theme-bar-controls">
+        <LangSwitcher />
+        <ThemeToggle />
+      </div>
     </header>
 
     <main class="page">
@@ -288,6 +298,12 @@ const {
         align-items: center;
         padding: 0.75rem var(--space-m);
         transition: background 0.25s ease;
+      }
+
+      .theme-bar-controls {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
       }
 
       .theme-bar-label {

@@ -1,37 +1,17 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
+import { getTranslations } from "../i18n/ui";
 
-interface AiEntry {
-  term: string;
-  desc: string;
-}
-
-const entries: AiEntry[] = [
-  {
-    term: "Skills",
-    desc: "I package domain knowledge and repeatable procedures into skills, so an AI agent follows the proven path instead of improvising. The expertise lives in version control, not in one person's head or a throwaway chat.",
-  },
-  {
-    term: "Harnesses",
-    desc: "I build the scaffolding around the model — the tools, guardrails, and checks it runs inside — so it produces correct, verifiable output and does dependable work rather than one-off demos.",
-  },
-  {
-    term: "Documented context",
-    desc: "I write code and documentation that hand an AI the context it needs to reason correctly: clear structure, explicit contracts, and the why behind decisions. The same clarity that helps a model helps the humans who maintain it.",
-  },
-];
+const t = getTranslations(Astro.currentLocale).ai;
 ---
 
 <section id="ai">
-  <SectionHeader num="05" label="Working with AI" title="Setting AI up to do real work" />
+  <SectionHeader num="05" label={t.label} title={t.title} />
   <p class="ai-lead">
-    AI changes how software gets built, not whether it needs to be built <span class="accent"
-      >well</span
-    >. Most of the value isn't in the prompt — it's in the engineering that lets a model work
-    reliably on a real codebase.
+    {t.lead.map((seg) => (seg.mark ? <span class="accent">{seg.text}</span> : seg.text))}
   </p>
   {
-    entries.map((item) => (
+    t.items.map((item) => (
       <div class="ai-item">
         <div class="ai-term">{item.term}</div>
         <p class="ai-desc">{item.desc}</p>

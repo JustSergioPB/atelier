@@ -1,8 +1,14 @@
 ---
-const linkedin = "https://www.linkedin.com/in/sergio-pe%C3%B1a-bayona-297308128/";
+import Icon from "./Icon.astro";
+import { getTranslations } from "../i18n/ui";
+import { MIDDOT } from "../separators";
+import { contact } from "../contact";
+import { shared } from "../i18n/shared";
+
+const t = getTranslations(Astro.currentLocale).footer;
 ---
 
 <footer class="footer">
-  <span class="footer-text">Sergio Peña Bayona · Software Engineer</span>
-  <a class="footer-text" href={linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+  <span class="footer-text">{shared.name} {MIDDOT} {t.role}</span>
+  <a class="footer-text" href={contact.linkedin} target="_blank" rel="noopener">{shared.brand.linkedin} <Icon name="arrowUpRight" /></a>
 </footer>

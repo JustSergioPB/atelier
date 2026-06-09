@@ -1,0 +1,12 @@
+---
+import { icons, type IconName } from "../icons";
+
+interface Props {
+  name: IconName;
+}
+
+const { name } = Astro.props;
+---
+
+<!-- Decorative; swap the body for an SVG library later without touching callers. -->
+<span class="icon" aria-hidden="true">{icons[name]}</span>

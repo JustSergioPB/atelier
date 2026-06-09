@@ -1,35 +1,17 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
+import { getTranslations } from "../i18n/ui";
+import { joinMiddot } from "../separators";
 
-interface ExperienceEntry {
-  meta: string;
-  title: string;
-  desc: string;
-  tags: string[];
-}
-
-const experience: ExperienceEntry[] = [
-  {
-    meta: "ERP-CRM Platform · Internal",
-    title: "Internal ERP-CRM, rebuilt on a custom design system",
-    desc: "Refactored and developed an internal ERP-CRM solution in Angular, customising Angular Material to implement the company's own design system on top of the framework's defaults.",
-    tags: ["Angular", "Angular Material", "Design System"],
-  },
-  {
-    meta: "Client ERP Software",
-    title: "Custom ERP for a client company",
-    desc: "Developed and maintained bespoke ERP software for a client, building frontend components and responsive interfaces with Angular and the Fuse template.",
-    tags: ["Angular", "Fuse", "Responsive UI"],
-  },
-];
+const t = getTranslations(Astro.currentLocale).experience;
 ---
 
 <section id="experience">
-  <SectionHeader num="02" label="Experience" title="Things I've shipped" />
+  <SectionHeader num="02" label={t.label} title={t.title} />
   {
-    experience.map((item) => (
+    t.items.map((item) => (
       <div class="exp-item">
-        <div class="exp-meta">{item.meta}</div>
+        <div class="exp-meta">{joinMiddot(item.meta)}</div>
         <div class="exp-title">{item.title}</div>
         <p class="exp-desc">{item.desc}</p>
         <div class="exp-tags">

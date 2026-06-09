@@ -1,20 +1,23 @@
 ---
-const linkedin = "https://www.linkedin.com/in/sergio-pe%C3%B1a-bayona-297308128/";
+import { getTranslations } from "../i18n/ui";
+import { MIDDOT, joinMiddot } from "../separators";
+import Icon from "./Icon.astro";
+import { contact } from "../contact";
+import { shared } from "../i18n/shared";
+
+const t = getTranslations(Astro.currentLocale).hero;
 ---
 
 <section class="hero" id="top">
-  <p class="hero-eyebrow">Ideate · Build · Ship</p>
+  <p class="hero-eyebrow">{joinMiddot(t.eyebrow)}</p>
   <h1 class="hero-title">
-    Software you<br />can <b class="hl">rely</b> on
-    <span>Designed, engineered, and tested end to end.</span>
+    {t.title.map((seg) => (seg.mark ? <b class="hl">{seg.text}</b> : seg.text))}
+    <span>{t.titleSpan}</span>
   </h1>
-  <p class="hero-sub">
-    Almost seven years engineering robust, well-tested systems across the stack — built to keep
-    working long after launch, for the people who'll maintain them.
-  </p>
-  <p class="hero-byline"><strong>Sergio Peña Bayona</strong> · Based in Spain</p>
+  <p class="hero-sub">{t.sub}</p>
+  <p class="hero-byline"><strong>{shared.name}</strong> {MIDDOT} {t.byline}</p>
   <div class="hero-actions">
-    <a class="btn btn-primary" href="#contact">Start a conversation →</a>
-    <a class="btn btn-ghost" href={linkedin} target="_blank" rel="noopener">View LinkedIn</a>
+    <a class="btn btn-primary" href="#contact">{t.ctaPrimary} <Icon name="arrowRight" /></a>
+    <a class="btn btn-ghost" href={contact.linkedin} target="_blank" rel="noopener">{t.ctaSecondary}</a>
   </div>
 </section>

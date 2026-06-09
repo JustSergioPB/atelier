@@ -1,22 +1,14 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
+import { getTranslations } from "../i18n/ui";
+
+const t = getTranslations(Astro.currentLocale).about;
 ---
 
 <section id="about">
-  <SectionHeader num="01" label="About" title="The work behind the screen" />
+  <SectionHeader num="01" label={t.label} title={t.title} />
   <p class="about-lead">
-    I build software <span class="accent">end to end</span> — from the data and services underneath
-    to the interfaces on top, applying the same engineering rigor at every layer.
+    {t.lead.map((seg) => (seg.mark ? <span class="accent">{seg.text}</span> : seg.text))}
   </p>
-  <p class="about-body">
-    For almost seven years I've worked across the full stack as a software engineer — backend,
-    frontend, mobile, and the layers in between. What stays constant isn't the toolset; it's how I
-    approach a problem: understand the real constraints, choose the right approach, and build
-    something that holds up in production.
-  </p>
-  <p class="about-body">
-    I care less about which framework is in fashion than about whether a solution is correct,
-    maintainable, and a genuine fit for the problem in front of me. Picking up a new domain or a new
-    way of working is part of the job — the means to an end, never the end itself.
-  </p>
+  {t.body.map((paragraph) => <p class="about-body">{paragraph}</p>)}
 </section>

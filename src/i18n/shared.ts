@@ -21,6 +21,11 @@ export const shared = {
     sentry: "Sentry",
     pwa: "PWA",
     placeholder: "Tech",
+    javascript: "JavaScript",
+    openai: "OpenAI API",
+    verifiableCredentials: "W3C VC 2.0",
+    saas: "SaaS",
+    mobile: "Mobile App",
   },
   // AI capability names kept in English across locales.
   aiTerms: {

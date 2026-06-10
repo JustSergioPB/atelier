@@ -163,6 +163,10 @@ section:not(:first-of-type)::before {
 .motion .approach-item:nth-child(2).is-visible { transition-delay: 0.08s; }
 .motion .approach-item:nth-child(3).is-visible { transition-delay: 0.16s; }
 
+/* Side-project card stagger (cards share a row) */
+.motion .proj-card:nth-child(2).is-visible { transition-delay: 0.08s; }
+.motion .proj-card:nth-child(3).is-visible { transition-delay: 0.16s; }
+
 /* Section rule draws in from the left */
 .motion section:not(:first-of-type)::before { transform: scaleX(0); }
 .motion section.is-visible::before {
@@ -467,6 +471,191 @@ section:not(:first-of-type)::before {
 
 /* "See all projects" — sits below the curated list on the landing. */
 .exp-seeall { margin-top: var(--space-m); }
+
+/* ─────────────────────────────────────────
+   SIDE PROJECTS (full-bleed photo cards)
+───────────────────────────────────────── */
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-m);
+}
+
+.proj-card {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  perspective: 1400px;
+}
+
+/* The element that actually rotates; holds both faces in 3D space. */
+.proj-flip {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
+  will-change: transform;
+}
+.proj-card:hover .proj-flip,
+.proj-card:focus-within .proj-flip {
+  transform: rotateY(180deg);
+}
+
+.proj-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.proj-front {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-s);
+}
+
+/* Title, vertically centered in the free space above the chip. */
+.proj-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-xs);
+  padding: var(--space-s) 0;
+}
+
+.proj-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* Chip pinned to the bottom edge — sits on a raised surface. */
+.proj-chip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  padding: 14px 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.proj-chip-logo {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 2px;
+  object-fit: contain;
+  display: block;
+}
+
+.proj-chip-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.proj-chip-text strong {
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.proj-chip-sub {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: var(--t-label);
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+
+.proj-chip-link {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 2px;
+  color: var(--color-pop);
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background 0.15s ease;
+}
+.proj-chip-link:hover { background: rgba(215, 38, 61, 0.12); }
+.proj-chip-link:focus-visible { outline: 2px solid var(--color-pop); outline-offset: 2px; }
+
+.proj-chip-year {
+  flex: 0 0 auto;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: var(--t-label);
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+  padding-right: 4px;
+}
+
+/* Back face — full description on the main background, pre-rotated 180°. */
+.proj-back {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  padding: var(--space-m);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+}
+
+.proj-back-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.proj-back-desc {
+  font-family: "Inter", sans-serif;
+  font-size: var(--t-body);
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.proj-back-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.proj-back-foot { margin-top: auto; }
+
+.proj-soon {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  border: 1px dashed var(--color-border);
+  border-radius: 2px;
+  padding: 4px 10px;
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proj-flip { transition: none; }
+}
 
 /* Shared "← Back" link — used by the /experience and /cookies pages. */
 .back-link {

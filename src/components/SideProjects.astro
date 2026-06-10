@@ -2,30 +2,77 @@
 import SectionHeader from "./SectionHeader.astro";
 import Icon from "./Icon.astro";
 import { getTranslations } from "../i18n/ui";
-import { joinMiddot } from "../separators";
 
 const t = getTranslations(Astro.currentLocale).projects;
 ---
 
 <section id="projects">
   <SectionHeader num="03" label={t.label} title={t.title} />
-  {
-    t.items.map((item) => (
-      <div class="exp-item">
-        <div class="exp-meta">{joinMiddot(item.meta)}</div>
-        <div class="exp-title">{item.title}</div>
-        <p class="exp-desc">{item.desc}</p>
-        <div class="exp-tags">
-          {item.tags.map((tag) => (
-            <span class="exp-tag">{tag}</span>
-          ))}
-        </div>
-        {item.link && (
-          <a class="exp-link" href={item.link} target="_blank" rel="noopener">
-            {t.viewProject} <Icon name="arrowUpRight" />
-          </a>
-        )}
-      </div>
-    ))
-  }
+  <div class="proj-grid">
+    {
+      t.items.map((item) => (
+        <article class="proj-card">
+          <div class="proj-flip">
+            {/* Front — blank placeholder for future imagery */}
+            <div class="proj-face proj-front">
+              <div class="proj-center">
+                <h3 class="proj-title">{item.title}</h3>
+              </div>
+
+              <div class="proj-chip">
+                <img
+                  class="proj-chip-logo"
+                  src={item.image}
+                  alt=""
+                  width="36"
+                  height="36"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="proj-chip-text">
+                  <strong>{item.chipLabel}</strong>
+                  <span class="proj-chip-sub">
+                    {item.link ? t.viewProject : t.comingSoon}
+                  </span>
+                </span>
+                {item.link ? (
+                  <a
+                    class="proj-chip-link"
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={`${t.viewProject}: ${item.title}`}
+                  >
+                    <Icon name="arrowUpRight" />
+                  </a>
+                ) : (
+                  <span class="proj-chip-year">{item.year}</span>
+                )}
+              </div>
+            </div>
+
+            {/* Back — full description on the main background */}
+            <div class="proj-face proj-back">
+              <h3 class="proj-back-title">{item.title}</h3>
+              <p class="proj-back-desc">{item.desc}</p>
+              <div class="proj-back-tags">
+                {item.tags.map((tag) => (
+                  <span class="exp-tag">{tag}</span>
+                ))}
+              </div>
+              <div class="proj-back-foot">
+                {item.link ? (
+                  <a class="exp-link" href={item.link} target="_blank" rel="noopener">
+                    {t.viewProject} <Icon name="arrowUpRight" />
+                  </a>
+                ) : (
+                  <span class="proj-soon">{t.comingSoon}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
 </section>

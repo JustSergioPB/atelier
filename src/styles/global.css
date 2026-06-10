@@ -551,14 +551,51 @@ section:not(:first-of-type)::before {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--space-m);
+  position: relative;
+}
+
+/* UML-style connector overlay, drawn behind the cards. */
+.approach-links {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.apx-wire {
+  fill: none;
+  stroke: var(--color-pop);
+  stroke-opacity: 0.15;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+.apx-pulse {
+  fill: none;
+  stroke: var(--color-pop);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: url(#apx-glow);
+  stroke-dasharray: 18 82;
+  animation: apx-flow 3s linear infinite;
+}
+@keyframes apx-flow {
+  to { stroke-dashoffset: -100; }
+}
+.apx-node {
+  fill: var(--color-pop);
 }
 
 /* Asymmetric placement: uneven spans + staggered baselines */
 .approach-item:nth-child(1) { grid-column: 1 / 7; }
 .approach-item:nth-child(2) { grid-column: 8 / 13; margin-top: var(--space-l); }
-.approach-item:nth-child(3) { grid-column: 3 / 10; margin-top: var(--space-m); }
+.approach-item:nth-child(3) { grid-column: 3 / 10; margin-top: calc(var(--space-m) + var(--space-s)); }
 
 .approach-item {
+  position: relative;
+  z-index: 1;
   background: var(--inv-surface);
   border: 1px solid var(--inv-border);
   border-top: 3px solid var(--inv-accent);
@@ -594,7 +631,8 @@ section:not(:first-of-type)::before {
 
 /* Collapse the asymmetry to a clean stack on narrow screens */
 @media (max-width: 720px) {
-  .approach-grid { grid-template-columns: 1fr; }
+  /* Roomier vertical gaps so the connector beam has space to travel. */
+  .approach-grid { grid-template-columns: 1fr; gap: var(--space-l); }
   .approach-item:nth-child(1),
   .approach-item:nth-child(2),
   .approach-item:nth-child(3) {
@@ -658,6 +696,50 @@ section:not(:first-of-type)::before {
   transform: rotateY(180deg);
 }
 
+/* Animated beam that runs around the card border on hover/focus. */
+@property --proj-beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.proj-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 2px;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--proj-beam-angle),
+    transparent 0 70%,
+    var(--color-pop) 80%,
+    #ff7184 85%,
+    var(--color-pop) 90%,
+    transparent 100%
+  );
+  /* Show only the padding ring (the border), punch out the center. */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  /* Glow so the lit segment reads as shining. */
+  filter: drop-shadow(0 0 4px var(--color-pop));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.proj-card:hover::before,
+.proj-card:focus-within::before {
+  opacity: 1;
+  animation: proj-beam 2.6s linear infinite;
+}
+
+@keyframes proj-beam {
+  to { --proj-beam-angle: 360deg; }
+}
+
 .proj-face {
   position: absolute;
   inset: 0;
@@ -675,25 +757,110 @@ section:not(:first-of-type)::before {
   padding: var(--space-s);
 }
 
-/* Title, vertically centered in the free space above the chip. */
-.proj-center {
+/* Browser-window mock filling the space above the chip. */
+.proj-window {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  gap: var(--space-xs);
-  padding: var(--space-s) 0;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: var(--space-s);
 }
 
-.proj-title {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--color-text-primary);
-  margin: 0;
+/* Title bar with traffic-light dots + project name as a "tab". */
+.proj-window-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.proj-dots {
+  display: inline-flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+.proj-dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-border);
+}
+.proj-dots i:first-child { background: var(--color-pop); }
+
+.proj-window-title {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: var(--t-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Body holds the generated pattern (::before, per-card) + the centered logo. */
+.proj-window-body {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background-color: var(--color-bg);
+  overflow: hidden;
+}
+.proj-window-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+}
+
+.proj-window-logo {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: 4px;
+  padding: 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* --- Per-project generated patterns (theme-aware, low-contrast) --- */
+
+/* 0 · Itzel — audio waveform: vertical bars, faded top & bottom. */
+.proj-pattern-0 .proj-window-body::before {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-border) 0 1px,
+    transparent 1px 12px
+  );
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 42%, #000 58%, transparent);
+          mask-image: linear-gradient(180deg, transparent, #000 42%, #000 58%, transparent);
+}
+
+/* 1 · Spark — credential network: dot grid of nodes, radial fade. */
+.proj-pattern-1 .proj-window-body::before {
+  background-image: radial-gradient(var(--color-border) 1.4px, transparent 1.6px);
+  background-size: 18px 18px;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(circle at center, #000 30%, transparent 75%);
+          mask-image: radial-gradient(circle at center, #000 30%, transparent 75%);
+}
+
+/* 2 · Ciela — soft diagonal hatch. */
+.proj-pattern-2 .proj-window-body::before {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--color-border) 0 1px,
+    transparent 1px 14px
+  );
+  opacity: 0.7;
 }
 
 /* Chip pinned to the bottom edge — sits on a raised surface. */
@@ -706,15 +873,6 @@ section:not(:first-of-type)::before {
   border-radius: 2px;
   padding: 14px 16px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-}
-
-.proj-chip-logo {
-  flex: 0 0 auto;
-  width: 48px;
-  height: 48px;
-  border-radius: 2px;
-  object-fit: contain;
-  display: block;
 }
 
 .proj-chip-text {
@@ -771,9 +929,8 @@ section:not(:first-of-type)::before {
   flex-direction: column;
   gap: var(--space-s);
   padding: var(--space-m);
-  background: var(--color-bg);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-top: 3px solid var(--color-accent);
 }
 
 .proj-back-title {
@@ -830,6 +987,11 @@ section:not(:first-of-type)::before {
 
 @media (prefers-reduced-motion: reduce) {
   .proj-flip { transition: none; }
+  .proj-card:hover::before,
+  .proj-card:focus-within::before {
+    animation: none;
+    background: var(--color-pop);
+  }
 }
 
 /* Shared "← Back" link — used by the /experience and /cookies pages. */

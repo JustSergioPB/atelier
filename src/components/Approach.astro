@@ -17,5 +17,120 @@ const t = getTranslations(Astro.currentLocale).approach;
         </div>
       ))
     }
+    {/* UML-style connectors drawn by the script below — kept last so it does
+        not shift the cards' :nth-child placement rules. */}
+    <svg class="approach-links" aria-hidden="true" preserveAspectRatio="none"></svg>
   </div>
 </section>
+
+<script>
+  (function () {
+    var grid = document.querySelector<HTMLElement>(".approach-grid");
+    var svg = grid?.querySelector<SVGSVGElement>(".approach-links");
+    if (!grid || !svg) return;
+    var items = Array.prototype.slice.call(
+      grid.querySelectorAll(".approach-item")
+    ) as HTMLElement[];
+    if (items.length < 2) return;
+
+    var NS = "http://www.w3.org/2000/svg";
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function el(name: string, attrs: Record<string, string | number>) {
+      var node = document.createElementNS(NS, name);
+      for (var k in attrs) node.setAttribute(k, String(attrs[k]));
+      return node;
+    }
+
+    function defs() {
+      var d = document.createElementNS(NS, "defs");
+      // Glow only — the pulse uses a solid stroke so the lit segment stays
+      // uniformly bright as it travels the whole rail (a positional gradient
+      // would only light up where the dash crosses the path's midpoint).
+      var f = el("filter", { id: "apx-glow", x: "-50%", y: "-50%", width: "200%", height: "200%" });
+      f.appendChild(el("feGaussianBlur", { stdDeviation: "2.4", result: "b" }));
+      var m = el("feMerge", {});
+      m.appendChild(el("feMergeNode", { in: "b" }));
+      m.appendChild(el("feMergeNode", { in: "SourceGraphic" }));
+      f.appendChild(m);
+      d.appendChild(f);
+      return d;
+    }
+
+    function rel(node: HTMLElement, gb: DOMRect) {
+      var r = node.getBoundingClientRect();
+      var l = r.left - gb.left, t = r.top - gb.top;
+      return { l: l, t: t, r: l + r.width, b: t + r.height, cx: l + r.width / 2, cy: t + r.height / 2 };
+    }
+
+    function wire(d: string, delay: number) {
+      svg!.appendChild(el("path", { class: "apx-wire", d: d }));
+      if (!reduce) {
+        var p = el("path", { class: "apx-pulse", d: d, pathLength: "100" });
+        (p as SVGElement).style.animationDelay = delay + "s";
+        svg!.appendChild(p);
+      }
+    }
+    function node(x: number, y: number) {
+      svg!.appendChild(el("circle", { class: "apx-node", cx: x, cy: y, r: "3.5" }));
+    }
+
+    function build() {
+      while (svg!.firstChild) svg!.removeChild(svg!.firstChild);
+      var gb = grid!.getBoundingClientRect();
+      if (!gb.width || items.length < 3) return;
+
+      var r = items.map(function (it) { return rel(it, gb); });
+      svg!.setAttribute("viewBox", "0 0 " + gb.width + " " + gb.height);
+      svg!.appendChild(defs());
+
+      // The lowest card is the stem target; the other two form the bar.
+      var bi = 0;
+      for (var i = 1; i < r.length; i++) if (r[i].t > r[bi].t) bi = i;
+      var bottom = r[bi];
+      var tops = r.filter(function (_, i) { return i !== bi; });
+
+      // Stacked layout (cards in one column) → vertical chain of beams.
+      if (tops[1].l < tops[0].r && tops[0].l < tops[1].r) {
+        for (var j = 0; j < r.length - 1; j++) {
+          var a = r[j], b = r[j + 1];
+          var my = (a.b + b.t) / 2;
+          wire("M" + a.cx + "," + a.b + " L" + a.cx + "," + my + " L" + b.cx + "," + my + " L" + b.cx + "," + b.t, j * -1.2);
+          node(a.cx, a.b);
+          node(b.cx, b.t);
+        }
+        return;
+      }
+
+      tops.sort(function (a, b) { return a.cx - b.cx; });
+      var L = tops[0], R = tops[1];
+      var barY = (Math.max(L.b, R.b) + bottom.t) / 2;
+      var jx = Math.min(Math.max(bottom.cx, L.cx), R.cx); // junction within the bar
+
+      // T = left arm (down into the bar, across to the junction, down the stem)
+      wire("M" + L.cx + "," + L.b + " L" + L.cx + "," + barY + " L" + jx + "," + barY + " L" + jx + "," + bottom.t, 0);
+      // + right arm (down into the bar, across to the junction)
+      wire("M" + R.cx + "," + R.b + " L" + R.cx + "," + barY + " L" + jx + "," + barY, -1.2);
+
+      node(L.cx, L.b);       // P.01 port
+      node(R.cx, R.b);       // P.02 port
+      node(jx, barY);        // T junction
+      node(jx, bottom.t);    // P.03 port
+    }
+
+    build();
+    var raf = 0;
+    function schedule() {
+      window.cancelAnimationFrame(raf);
+      raf = window.requestAnimationFrame(build);
+    }
+    if ("ResizeObserver" in window) new ResizeObserver(schedule).observe(grid);
+    window.addEventListener("resize", schedule);
+    // Cards slide up via a staggered scroll-reveal (transform). That moves them
+    // without resizing the grid, so the ResizeObserver never fires — recompute
+    // when each card's reveal transition settles or the beams go stale.
+    grid.addEventListener("transitionend", function (e) {
+      if ((e as TransitionEvent).propertyName === "transform") schedule();
+    });
+  })();
+</script>

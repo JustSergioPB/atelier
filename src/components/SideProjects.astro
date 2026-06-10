@@ -10,25 +10,32 @@ const t = getTranslations(Astro.currentLocale).projects;
   <SectionHeader num="03" label={t.label} title={t.title} />
   <div class="proj-grid">
     {
-      t.items.map((item) => (
+      t.items.map((item, i) => (
         <article class="proj-card">
           <div class="proj-flip">
-            {/* Front — blank placeholder for future imagery */}
+            {/* Front — browser-window mock: logo on a per-project generated pattern */}
             <div class="proj-face proj-front">
-              <div class="proj-center">
-                <h3 class="proj-title">{item.title}</h3>
+              <div class={`proj-window proj-pattern-${i % 3}`}>
+                <div class="proj-window-bar">
+                  <span class="proj-dots" aria-hidden="true">
+                    <i /><i /><i />
+                  </span>
+                  <span class="proj-window-title">{item.title}</span>
+                </div>
+                <div class="proj-window-body">
+                  <img
+                    class="proj-window-logo"
+                    src={item.image}
+                    alt={item.imageAlt}
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
               </div>
 
               <div class="proj-chip">
-                <img
-                  class="proj-chip-logo"
-                  src={item.image}
-                  alt=""
-                  width="36"
-                  height="36"
-                  loading="lazy"
-                  decoding="async"
-                />
                 <span class="proj-chip-text">
                   <strong>{item.chipLabel}</strong>
                   <span class="proj-chip-sub">

@@ -1,15 +1,27 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
-import { getTranslations } from "../i18n/ui";
+import Icon from "./Icon.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getTranslations, resolveLang } from "../i18n/ui";
 import { joinMiddot } from "../separators";
 
-const t = getTranslations(Astro.currentLocale).experience;
+interface Props {
+  // Landing shows a curated few + a link to the full list; the dedicated
+  // /experience page renders every item with `full`.
+  full?: boolean;
+}
+const { full = false } = Astro.props;
+
+const lang = resolveLang(Astro.currentLocale);
+const t = getTranslations(lang).experience;
+const items = full ? t.items : t.items.slice(0, 3);
+const allHref = getRelativeLocaleUrl(lang, "experience");
 ---
 
 <section id="experience">
   <SectionHeader num="02" label={t.label} title={t.title} />
   {
-    t.items.map((item) => (
+    items.map((item) => (
       <div class="exp-item">
         <div class="exp-meta">{joinMiddot(item.meta)}</div>
         <div class="exp-title">{item.title}</div>
@@ -19,7 +31,19 @@ const t = getTranslations(Astro.currentLocale).experience;
             <span class="exp-tag">{tag}</span>
           ))}
         </div>
+        {item.link && (
+          <a class="exp-link" href={item.link} target="_blank" rel="noopener">
+            {t.viewProject} <Icon name="arrowUpRight" />
+          </a>
+        )}
       </div>
     ))
+  }
+  {
+    !full && (
+      <a class="exp-link exp-seeall" href={allHref}>
+        {t.seeAll} <Icon name="arrowRight" />
+      </a>
+    )
   }
 </section>

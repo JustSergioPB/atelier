@@ -1,0 +1,15 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Experience from "../components/Experience.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getTranslations, resolveLang } from "../i18n/ui";
+
+const lang = resolveLang(Astro.currentLocale);
+const t = getTranslations(lang);
+const homeHref = getRelativeLocaleUrl(lang);
+---
+
+<BaseLayout title={t.experience.pageMeta.title} description={t.experience.pageMeta.description}>
+  <Experience full />
+  <a class="back-link" href={homeHref}>← {t.common.back}</a>
+</BaseLayout>

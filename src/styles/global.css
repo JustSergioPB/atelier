@@ -465,6 +465,25 @@ section:not(:first-of-type)::before {
 .exp-link:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.25em; }
 .exp-link:focus-visible { outline: 2px solid var(--color-pop); outline-offset: 2px; }
 
+/* "See all projects" — sits below the curated list on the landing. */
+.exp-seeall { margin-top: var(--space-m); }
+
+/* Shared "← Back" link — used by the /experience and /cookies pages. */
+.back-link {
+  display: inline-block;
+  margin-top: var(--space-m);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-pop);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.back-link:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.25em; }
+.back-link:focus-visible { outline: 2px solid var(--color-pop); outline-offset: 2px; }
+
 /* ─────────────────────────────────────────
    WORKING WITH AI
 ───────────────────────────────────────── */

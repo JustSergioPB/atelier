@@ -24,6 +24,10 @@ export const ui = {
       title: `${shared.name} — Software Engineer`,
       description: `${shared.name} — Software Engineer based in Spain. Seven years of experience solving problems across all layers of development, adapting to whatever each project needs.`,
     },
+    // Strings shared across pages (e.g. the "← Back" link).
+    common: {
+      back: "Back",
+    },
     themeBar: {
       location: "Spain",
       themeLabel: "Theme",
@@ -62,18 +66,62 @@ export const ui = {
     },
     experience: {
       label: "Experience",
-      title: "Projects I've shipped",
+      title: "Projects I've worked on",
+      viewProject: "Visit site",
+      seeAll: "See all projects",
+      pageMeta: {
+        title: `Projects — ${shared.name}`,
+        description:
+          "Professional projects I've shipped — from real-time IoT platforms to ERP systems, SaaS apps, and client marketing sites.",
+      },
       items: [
         {
-          meta: ["Internal ERP-CRM"],
+          meta: ["Vrandalismo", "Creative Studio", "Freelance"],
+          title: "Landing page for a creative brand studio",
+          desc: "Built the marketing site for Vrandalismo, a creative studio, with Astro for fast static delivery and Tailwind for a tightly controlled design system. Wired up Sanity CMS so the team can edit services and case studies on their own, no developer in the loop.",
+          tags: [shared.tech.astro, shared.tech.tailwind, shared.tech.sanity],
+          link: "https://vrandalismo.es/",
+        },
+        {
+          meta: ["DEHN", "IoT Platform", "Current"],
+          title: "Real-time IoT dashboards for lightning protection",
+          desc: "Lead frontend and backend contributor on real-time IoT dashboards and a windmill lightning-detection system, built with Vue 3 and NestJS.",
+          tags: [shared.tech.vue, shared.tech.nestjs, "Real-time IoT"],
+        },
+        {
+          meta: ["DEHN", "Hardware Emulation"],
+          title: "Virtual device for hardware emulation",
+          desc: "Built a virtual device with FastAPI and Vue to emulate proprietary hardware, letting the team verify end-to-end connectivity with ThingsBoard without the physical device.",
+          tags: [shared.tech.fastapi, shared.tech.vue, shared.tech.thingsboard],
+        },
+        {
+          meta: ["Essentialist", "Luxury Travel"],
+          title: "Backoffice and client apps for luxury travel",
+          desc: "Worked within the team on the backoffice for travel-itinerary management on Angular (14–18) and contributed to the premium customer-facing app for the luxury travel sector. Took part in architectural decisions for scalability and helped run error monitoring with Sentry — triage, fix prioritization, and resolution tracking across releases.",
+          tags: [shared.tech.angular, shared.tech.sentry, "Architecture"],
+        },
+        {
+          meta: ["Evalua", "Insurance SaaS"],
+          title: "Angular SaaS platform for corporate insurance",
+          desc: "Contributed to building and maintaining an Angular SaaS platform for corporate insurance management, helping establish the CSS architecture alongside the team.",
+          tags: [shared.tech.angular, "CSS Architecture"],
+        },
+        {
+          meta: ["Evalua", "Insurance PWA"],
+          title: "Client PWA for insurance claims",
+          desc: "Shipped features for a client-side Progressive Web App that let policyholders manage their insurance and file claims directly.",
+          tags: [shared.tech.angular, shared.tech.pwa],
+        },
+        {
+          meta: ["Bosonit", "Internal ERP-CRM"],
           title: "ERP-CRM overhaul and design system implementation",
           desc: "Refactored and developed the company's internal platform using Angular. Customized Angular Material to build a proprietary component library, unifying the UI and speeding up future feature delivery.",
           tags: [shared.tech.angular, shared.tech.angularMaterial, "Design System"],
         },
         {
-          meta: ["Custom ERP", "For Client"],
+          meta: ["Ginzo Technologies", "Custom ERP"],
           title: "Bespoke management software development",
-          desc: "Created and maintained a custom ERP system. Designed dynamic, responsive interfaces using Angular and the Fuse template, ensuring optimal performance across all screen sizes.",
+          desc: "Contributed to a custom ERP for a client company, building frontend components and responsive interfaces with Angular and the Fuse template alongside the development team.",
           tags: [shared.tech.angular, shared.tech.fuse, "Responsive Layouts"],
         },
       ],
@@ -179,7 +227,6 @@ export const ui = {
       label: "Legal",
       title: "Cookie Policy",
       updated: "Last updated: June 2026",
-      back: "Back",
       manage: "Configure preferences",
       intro: [
         "This policy outlines cookie usage on this site. It’s very short because, frankly, I keep data storage to the absolute minimum.",
@@ -227,6 +274,10 @@ export const ui = {
       title: `${shared.name} — Ingeniero de software`,
       description: `${shared.name} — Ingeniero de software en España. Siete años resolviendo problemas en todas las capas del código y adaptándome a lo que necesita cada proyecto.`,
     },
+    // Strings shared across pages (e.g. the "← Back" link).
+    common: {
+      back: "Volver",
+    },
     themeBar: {
       location: "España",
       themeLabel: "Color",
@@ -265,18 +316,62 @@ export const ui = {
     },
     experience: {
       label: "Experiencia",
-      title: "Proyectos que he sacado adelante",
+      title: "Proyectos en los que he trabajado",
+      viewProject: "Visitar web",
+      seeAll: "Ver todos los proyectos",
+      pageMeta: {
+        title: `Proyectos — ${shared.name}`,
+        description:
+          "Proyectos profesionales que he sacado adelante: desde plataformas IoT en tiempo real hasta sistemas ERP, apps SaaS y webs de marketing para clientes.",
+      },
       items: [
         {
-          meta: ["ERP-CRM Interno"],
+          meta: ["Vrandalismo", "Estudio creativo", "Freelance"],
+          title: "Landing page para un estudio creativo de marca",
+          desc: "Desarrollé la web de Vrandalismo, un estudio creativo, con Astro para una entrega estática rápida y Tailwind para un sistema de diseño bien controlado. Integré Sanity CMS para que el equipo edite servicios y casos de estudio por su cuenta, sin depender de un desarrollador.",
+          tags: [shared.tech.astro, shared.tech.tailwind, shared.tech.sanity],
+          link: "https://vrandalismo.es/",
+        },
+        {
+          meta: ["DEHN", "Plataforma IoT", "Actual"],
+          title: "Dashboards IoT en tiempo real para protección contra rayos",
+          desc: "Contribuidor principal de frontend y backend en dashboards IoT en tiempo real y un sistema de detección de rayos para aerogeneradores, con Vue 3 y NestJS.",
+          tags: [shared.tech.vue, shared.tech.nestjs, "IoT en tiempo real"],
+        },
+        {
+          meta: ["DEHN", "Emulación de hardware"],
+          title: "Dispositivo virtual para emulación de hardware",
+          desc: "Construí un dispositivo virtual con FastAPI y Vue para emular hardware propietario, permitiendo al equipo verificar la conectividad de extremo a extremo con ThingsBoard sin el dispositivo físico.",
+          tags: [shared.tech.fastapi, shared.tech.vue, shared.tech.thingsboard],
+        },
+        {
+          meta: ["Essentialist", "Viajes de lujo"],
+          title: "Backoffice y apps de cliente para viajes de lujo",
+          desc: "Trabajé dentro del equipo en el backoffice de gestión de itinerarios de viaje en Angular (14–18) y contribuí a la app premium de cara al cliente del sector de viajes de lujo. Participé en decisiones de arquitectura para la escalabilidad y ayudé en la monitorización de errores con Sentry: triaje, priorización de correcciones y seguimiento de resoluciones entre releases.",
+          tags: [shared.tech.angular, shared.tech.sentry, "Arquitectura"],
+        },
+        {
+          meta: ["Evalua", "SaaS de seguros"],
+          title: "Plataforma SaaS en Angular para seguros corporativos",
+          desc: "Contribuí al desarrollo y mantenimiento de una plataforma SaaS en Angular para la gestión de seguros corporativos, ayudando a establecer la arquitectura CSS junto al equipo.",
+          tags: [shared.tech.angular, "Arquitectura CSS"],
+        },
+        {
+          meta: ["Evalua", "PWA de seguros"],
+          title: "PWA de cliente para gestión de siniestros",
+          desc: "Desarrollé funcionalidades para una Progressive Web App del lado del cliente que permitía a los asegurados gestionar su seguro y declarar siniestros directamente.",
+          tags: [shared.tech.angular, shared.tech.pwa],
+        },
+        {
+          meta: ["Bosonit", "ERP-CRM Interno"],
           title: "Reconstrucción de ERP y creación de sistema de diseño",
           desc: "Refactoricé y desarrollé la plataforma interna de la empresa con Angular. Personalicé Angular Material para crear un sistema de componentes propio, unificando la interfaz y acelerando los futuros desarrollos.",
           tags: [shared.tech.angular, shared.tech.angularMaterial, "Sistema de diseño"],
         },
         {
-          meta: ["ERP a medida", "Para cliente"],
+          meta: ["Ginzo Technologies", "ERP a medida"],
           title: "Desarrollo de software de gestión personalizado",
-          desc: "Creación y mantenimiento de un ERP a medida. Diseñé interfaces dinámicas y responsive utilizando Angular y la plantilla Fuse, asegurando un rendimiento óptimo en cualquier tipo de pantalla.",
+          desc: "Contribuí a un ERP a medida para una empresa cliente, desarrollando componentes de frontend e interfaces responsive con Angular y la plantilla Fuse junto al equipo de desarrollo.",
           tags: [shared.tech.angular, shared.tech.fuse, "Layouts responsive"],
         },
       ],
@@ -382,7 +477,6 @@ export const ui = {
       label: "Legal",
       title: "Política de cookies",
       updated: "Última actualización: junio de 2026",
-      back: "Volver",
       manage: "Configurar preferencias",
       intro: [
         "Esta política detalla el uso de cookies en la web. Es muy corta porque, sinceramente, guardo lo mínimo imprescindible.",

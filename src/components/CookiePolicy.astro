@@ -4,7 +4,8 @@ import { getTranslations, resolveLang } from "../i18n/ui";
 import { contact, mailto } from "../contact";
 
 const lang = resolveLang(Astro.currentLocale);
-const t = getTranslations(lang).cookies;
+const dict = getTranslations(lang);
+const t = dict.cookies;
 const homeHref = getRelativeLocaleUrl(lang);
 
 // Split a paragraph around the contact email so it can be highlighted.
@@ -52,7 +53,7 @@ const splitEmail = (p: string) => p.split(contact.email);
     <button type="button" class="legal-manage-btn" data-cookie-settings>{t.manage}</button>
   </p>
 
-  <a class="legal-back" href={homeHref}>← {t.back}</a>
+  <a class="back-link" href={homeHref}>← {dict.common.back}</a>
 </article>
 
 <style>
@@ -182,30 +183,6 @@ const splitEmail = (p: string) => p.split(contact.email);
     color: var(--color-pop);
   }
   .legal-manage-btn:focus-visible {
-    outline: 2px solid var(--color-pop);
-    outline-offset: 2px;
-  }
-
-  .legal-back {
-    display: inline-block;
-    margin-top: var(--space-m);
-    font-family: "Space Grotesk", sans-serif;
-    font-size: var(--t-label);
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-pop);
-    text-decoration: none;
-    transition: color 0.15s ease;
-  }
-
-  .legal-back:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.25em;
-  }
-
-  .legal-back:focus-visible {
     outline: 2px solid var(--color-pop);
     outline-offset: 2px;
   }

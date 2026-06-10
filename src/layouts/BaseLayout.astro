@@ -2,6 +2,7 @@
 import Header from "../components/Header.astro";
 import CookieBanner from "../components/CookieBanner.astro";
 import { getTranslations, htmlLang, resolveLang } from "../i18n/ui";
+import { version } from "../../package.json";
 import "../styles/global.css";
 
 interface Props {
@@ -26,6 +27,7 @@ const {
 <html lang={htmlLang[lang]} data-theme="light">
   <head>
     <meta charset="UTF-8" />
+    <meta name="version" content={version} />
     <script is:inline>
       // Runs before paint to set the theme — prevents a flash of the wrong theme.
       (function () {

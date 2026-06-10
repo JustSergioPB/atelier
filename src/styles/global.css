@@ -29,8 +29,8 @@
   --space-xs: 0.5rem;
   --space-s: 1rem;
   --space-m: 2rem;
-  --space-l: 4rem;
-  --space-xl: 8rem;
+  --space-l: 5rem;
+  --space-xl: 10rem;
 
   /* Touch of color — used sparingly (CTA, interaction, emphasis) */
   --color-pop: #d7263d;
@@ -134,7 +134,8 @@ section:not(:first-of-type)::before {
   top: 0;
   left: 0;
   width: 100%;
-  height: 3px;
+  height: 1px;
+  opacity: 0.5;
   background: var(--color-accent);
   transform-origin: left center;
 }
@@ -347,7 +348,7 @@ section:not(:first-of-type)::before {
   font-weight: 300;
   line-height: 1.85;
   color: var(--color-text-tertiary);
-  max-width: 640px;
+  max-width: 58ch;
 }
 
 .about-body + .about-body { margin-top: var(--space-s); }
@@ -359,7 +360,7 @@ section:not(:first-of-type)::before {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-xs);
-  padding: var(--space-m) 0;
+  padding: var(--space-l) 0;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -393,7 +394,7 @@ section:not(:first-of-type)::before {
   font-weight: 300;
   line-height: 1.8;
   color: var(--color-text-tertiary);
-  max-width: 660px;
+  max-width: 58ch;
 }
 
 .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--space-xs); }
@@ -693,7 +694,7 @@ section:not(:first-of-type)::before {
   display: grid;
   grid-template-columns: minmax(0, 220px) 1fr;
   gap: var(--space-m);
-  padding: var(--space-m) 0;
+  padding: var(--space-l) 0;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -715,7 +716,7 @@ section:not(:first-of-type)::before {
   font-weight: 300;
   line-height: 1.8;
   color: var(--color-text-tertiary);
-  max-width: 620px;
+  max-width: 58ch;
 }
 
 /* ─────────────────────────────────────────

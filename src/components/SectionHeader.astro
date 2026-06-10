@@ -1,15 +1,15 @@
 ---
 interface Props {
-  num: string;
+  // Accepted for backward-compatibility with callers; no longer rendered.
+  num?: string;
   label: string;
   title: string;
 }
 
-const { num, label, title } = Astro.props;
+const { label, title } = Astro.props;
 ---
 
 <div class="section-header">
-  <div class="section-ghost-num">{num}</div>
   <div class="section-header-content">
     <p class="section-label">{label}</p>
     <h2 class="section-title">{title}</h2>

@@ -50,6 +50,15 @@
   --color-text-tertiary: var(--_dark-400);
   --color-hairline: 1px solid var(--_dark-700);
   --color-hairline-accent: 1px solid var(--_dark-700);
+
+  /* Inverted band — flips to the light palette for contrast */
+  --inv-bg: var(--_light-100);
+  --inv-surface: #ffffff;
+  --inv-border: var(--_light-200);
+  --inv-accent: var(--_light-900);
+  --inv-text-primary: var(--_light-900);
+  --inv-text-secondary: var(--_light-700);
+  --inv-text-tertiary: var(--_light-400);
 }
 
 [data-theme="light"] {
@@ -65,6 +74,15 @@
   --color-text-tertiary: var(--_light-400);
   --color-hairline: 1px solid var(--_light-200);
   --color-hairline-accent: 1px solid var(--_light-200);
+
+  /* Inverted band — flips to the dark palette for contrast */
+  --inv-bg: var(--_dark-900);
+  --inv-surface: var(--_dark-800);
+  --inv-border: var(--_dark-700);
+  --inv-accent: var(--_dark-50);
+  --inv-text-primary: var(--_dark-50);
+  --inv-text-secondary: var(--_dark-100);
+  --inv-text-tertiary: var(--_dark-400);
 }
 
 /* ─────────────────────────────────────────
@@ -176,6 +194,49 @@ section:not(:first-of-type)::before {
 }
 
 /* ─────────────────────────────────────────
+   MICRO-ANIMATIONS (ambient/idle loops — gated on .motion)
+   Parallax (cursor) is applied via the `translate` property in JS.
+───────────────────────────────────────── */
+
+/* #1 Pointer parallax target gets a smooth ease on the JS-driven translate */
+.motion .hero-photo { transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* #2 Red accents get a slow lighter-red shimmer sweeping across the glyphs */
+@keyframes accent-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.motion .hl,
+.motion .accent {
+  background: linear-gradient(
+    100deg,
+    var(--color-pop) 0%,
+    var(--color-pop) 38%,
+    #ff7184 50%,
+    var(--color-pop) 62%,
+    var(--color-pop) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: accent-shimmer 6s linear infinite;
+}
+
+/* #3 Primary CTA arrow breathes to the right */
+@keyframes cta-arrow {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(3px); }
+}
+.motion .btn-primary .icon {
+  display: inline-block;
+  animation: cta-arrow 1.6s ease-in-out infinite;
+}
+/* On hover the button's own shift takes over — hold the arrow steady */
+.btn-primary:hover .icon { animation-play-state: paused; }
+
+/* ─────────────────────────────────────────
    SECTION HEADERS
 ───────────────────────────────────────── */
 .section-header {
@@ -184,20 +245,6 @@ section:not(:first-of-type)::before {
   align-items: center;
   gap: 0;
   margin-bottom: var(--space-l);
-}
-
-.section-ghost-num {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: clamp(4rem, 11vw, 8rem);
-  font-weight: 800;
-  line-height: 0.8;
-  letter-spacing: -0.05em;
-  color: var(--color-border);
-  user-select: none;
-  pointer-events: none;
-  flex-shrink: 0;
-  margin-right: 0.5rem;
-  transition: color 0.25s ease;
 }
 
 .section-header-content { flex: 1; }
@@ -349,6 +396,8 @@ section:not(:first-of-type)::before {
   line-height: 1.85;
   color: var(--color-text-tertiary);
   max-width: 58ch;
+  /* Asymmetry: body steps off the left axis, away from the lead */
+  margin-left: clamp(0px, 14vw, 180px);
 }
 
 .about-body + .about-body { margin-top: var(--space-s); }
@@ -362,7 +411,12 @@ section:not(:first-of-type)::before {
   gap: var(--space-xs);
   padding: var(--space-l) 0;
   border-bottom: 1px solid var(--color-border);
+  /* Asymmetry: ragged width, alternating side anchor (see nth-child below) */
+  max-width: 760px;
 }
+
+/* Even items push to the right edge; odd stay left — a zigzag down the list */
+.exp-item:nth-child(even) { margin-left: auto; }
 
 .exp-item:first-child { padding-top: 0; }
 .exp-item:last-child { border-bottom: none; padding-bottom: 0; }
@@ -410,18 +464,104 @@ section:not(:first-of-type)::before {
 }
 
 /* ─────────────────────────────────────────
-   APPROACH
+   EXPERIENCE — BENTO (full /experience page only)
 ───────────────────────────────────────── */
-.approach-grid {
+.exp-bento {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--space-m);
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-s);
 }
 
-.approach-item {
+/* Tiles override the list styling: cards with an accent top edge */
+.exp-bento .exp-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-width: none;
+  margin: 0;
+  padding: var(--space-m);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-top: 3px solid var(--color-accent);
+  border-radius: 2px;
+  transition: transform 0.2s ease, border-top-color 0.2s ease;
+}
+
+.exp-bento .exp-item:hover {
+  transform: translateY(-3px);
+  border-top-color: var(--color-pop);
+}
+
+.exp-bento .exp-desc { max-width: none; }
+/* Tags + link sit at the tile foot so taller tiles stay balanced */
+.exp-bento .exp-tags { margin-top: auto; }
+
+/* Full page (8 tiles): two feature tiles up top, even rows, full-width footer */
+.exp-bento--full .exp-item:nth-child(1) { grid-column: span 4; grid-row: span 2; }
+.exp-bento--full .exp-item:nth-child(2) { grid-column: span 2; grid-row: span 2; }
+.exp-bento--full .exp-item:nth-child(3) { grid-column: span 3; }
+.exp-bento--full .exp-item:nth-child(4) { grid-column: span 3; }
+.exp-bento--full .exp-item:nth-child(5) { grid-column: span 2; }
+.exp-bento--full .exp-item:nth-child(6) { grid-column: span 2; }
+.exp-bento--full .exp-item:nth-child(7) { grid-column: span 2; }
+.exp-bento--full .exp-item:nth-child(8) { grid-column: span 6; }
+
+/* Curated landing (3 tiles): tall feature left, two stacked right */
+.exp-bento--curated .exp-item:nth-child(1) { grid-column: span 3; grid-row: span 2; }
+.exp-bento--curated .exp-item:nth-child(2) { grid-column: span 3; }
+.exp-bento--curated .exp-item:nth-child(3) { grid-column: span 3; }
+
+/* Medium: 4-col, drop the row-spans; feature (and full's footer) stay wide */
+@media (max-width: 900px) {
+  .exp-bento { grid-template-columns: repeat(4, 1fr); }
+  .exp-bento .exp-item:nth-child(n) { grid-column: span 2; grid-row: auto; }
+  .exp-bento--full .exp-item:nth-child(1) { grid-column: span 4; }
+  .exp-bento--full .exp-item:nth-child(8) { grid-column: span 4; }
+  .exp-bento--curated .exp-item:nth-child(1) { grid-column: span 4; }
+}
+
+/* Small: single-column stack */
+@media (max-width: 600px) {
+  .exp-bento { grid-template-columns: 1fr; }
+  .exp-bento .exp-item:nth-child(n) { grid-column: auto; grid-row: auto; }
+}
+
+/* ─────────────────────────────────────────
+   APPROACH — full-bleed inverted band
+───────────────────────────────────────── */
+#approach {
+  /* Break out of the centered .page container, edge to edge */
+  margin-inline: calc(50% - 50vw);
+  /* Re-align inner content with the page gutter on wide viewports */
+  padding-inline: max(var(--space-m), calc(50vw - 550px + var(--space-m)));
+  padding-block: var(--space-xl);
+  background: var(--inv-bg);
+  color: var(--inv-text-secondary);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+/* Band edges carry the contrast — drop the inherited hairline rule */
+#approach::before { display: none; }
+
+/* The inverted band flips the shared header tokens locally */
+#approach .section-label { color: var(--inv-accent); }
+#approach .section-title { color: var(--inv-text-primary); }
+
+.approach-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-m);
+}
+
+/* Asymmetric placement: uneven spans + staggered baselines */
+.approach-item:nth-child(1) { grid-column: 1 / 7; }
+.approach-item:nth-child(2) { grid-column: 8 / 13; margin-top: var(--space-l); }
+.approach-item:nth-child(3) { grid-column: 3 / 10; margin-top: var(--space-m); }
+
+.approach-item {
+  background: var(--inv-surface);
+  border: 1px solid var(--inv-border);
+  border-top: 3px solid var(--inv-accent);
   border-radius: 2px;
   padding: var(--space-m);
 }
@@ -429,7 +569,7 @@ section:not(:first-of-type)::before {
 .approach-num {
   font-family: "SF Mono", "Fira Code", monospace;
   font-size: var(--t-label);
-  color: var(--color-accent);
+  color: var(--inv-accent);
   letter-spacing: 0.1em;
   margin-bottom: var(--space-s);
 }
@@ -440,7 +580,7 @@ section:not(:first-of-type)::before {
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
-  color: var(--color-text-primary);
+  color: var(--inv-text-primary);
   margin-bottom: var(--space-s);
 }
 
@@ -449,7 +589,18 @@ section:not(:first-of-type)::before {
   font-size: var(--t-body);
   font-weight: 300;
   line-height: 1.8;
-  color: var(--color-text-tertiary);
+  color: var(--inv-text-tertiary);
+}
+
+/* Collapse the asymmetry to a clean stack on narrow screens */
+@media (max-width: 720px) {
+  .approach-grid { grid-template-columns: 1fr; }
+  .approach-item:nth-child(1),
+  .approach-item:nth-child(2),
+  .approach-item:nth-child(3) {
+    grid-column: 1 / -1;
+    margin-top: 0;
+  }
 }
 
 /* ─────────────────────────────────────────
@@ -486,6 +637,12 @@ section:not(:first-of-type)::before {
   position: relative;
   aspect-ratio: 4 / 5;
   perspective: 1400px;
+}
+
+/* Asymmetry: staggered baselines across the row (wide screens only) */
+@media (min-width: 860px) {
+  .proj-card:nth-child(2) { transform: translateY(var(--space-l)); }
+  .proj-card:nth-child(3) { transform: translateY(var(--space-m)); }
 }
 
 /* The element that actually rotates; holds both faces in 3D space. */
@@ -654,6 +811,23 @@ section:not(:first-of-type)::before {
   display: inline-block;
 }
 
+/* Small/medium screens: the grid becomes a swipeable, snapping carousel */
+@media (max-width: 859px) {
+  .proj-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(78%, 300px);
+    gap: var(--space-s);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: var(--space-s);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  .proj-grid::-webkit-scrollbar { display: none; } /* WebKit */
+  .proj-card { scroll-snap-align: start; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .proj-flip { transition: none; }
 }
@@ -741,6 +915,8 @@ section:not(:first-of-type)::before {
   max-width: 640px;
   line-height: 1.85;
   margin-bottom: var(--space-m);
+  /* Asymmetry: sub steps off the left axis, echoing the About body */
+  margin-left: clamp(0px, 14vw, 180px);
 }
 
 .contact-note {
@@ -778,5 +954,10 @@ a.footer-text:focus-visible { outline: 2px solid var(--color-pop); outline-offse
 @media (max-width: 640px) {
   .page { padding: var(--space-l) var(--space-s) var(--space-l); }
   .section-header { gap: var(--space-xs); }
+
   .ai-item { grid-template-columns: 1fr; gap: var(--space-xs); }
+
+  /* Asymmetry collapses to clean left-aligned stacks on small screens */
+  .about-body,
+  .contact-sub { margin-left: 0; }
 }

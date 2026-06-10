@@ -9,36 +9,46 @@ interface Props {
   // Landing shows a curated few + a link to the full list; the dedicated
   // /experience page renders every item with `full`.
   full?: boolean;
+  // The full page lays the items out as a bento grid; the landing keeps the list.
+  bento?: boolean;
 }
-const { full = false } = Astro.props;
+const { full = false, bento = false } = Astro.props;
 
 const lang = resolveLang(Astro.currentLocale);
 const t = getTranslations(lang).experience;
 const items = full ? t.items : t.items.slice(0, 3);
 const allHref = getRelativeLocaleUrl(lang, "experience");
+
+// Bento gets a count-aware layout: the full page has 8 tiles, the curated
+// landing has 3, so the tile rhythm differs (see .exp-bento--* in global.css).
+const wrapClass = bento
+  ? `exp-bento ${full ? "exp-bento--full" : "exp-bento--curated"}`
+  : "exp-list";
 ---
 
 <section id="experience">
   <SectionHeader num="02" label={t.label} title={t.title} />
-  {
-    items.map((item) => (
-      <div class="exp-item">
-        <div class="exp-meta">{joinMiddot(item.meta)}</div>
-        <div class="exp-title">{item.title}</div>
-        <p class="exp-desc">{item.desc}</p>
-        <div class="exp-tags">
-          {item.tags.map((tag) => (
-            <span class="exp-tag">{tag}</span>
-          ))}
+  <div class={wrapClass}>
+    {
+      items.map((item) => (
+        <div class="exp-item">
+          <div class="exp-meta">{joinMiddot(item.meta)}</div>
+          <div class="exp-title">{item.title}</div>
+          <p class="exp-desc">{item.desc}</p>
+          <div class="exp-tags">
+            {item.tags.map((tag) => (
+              <span class="exp-tag">{tag}</span>
+            ))}
+          </div>
+          {item.link && (
+            <a class="exp-link" href={item.link} target="_blank" rel="noopener">
+              {t.viewProject} <Icon name="arrowUpRight" />
+            </a>
+          )}
         </div>
-        {item.link && (
-          <a class="exp-link" href={item.link} target="_blank" rel="noopener">
-            {t.viewProject} <Icon name="arrowUpRight" />
-          </a>
-        )}
-      </div>
-    ))
-  }
+      ))
+    }
+  </div>
   {
     !full && (
       <a class="exp-link exp-seeall" href={allHref}>

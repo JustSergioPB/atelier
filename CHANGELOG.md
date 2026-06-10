@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.4.0...atelier-v0.5.0) (2026-06-10)
+
+
+### Features
+
+* optimization for perfomance ([4ffd478](https://github.com/JustSergioPB/atelier/commit/4ffd478fc3c2d1a9d7d809e1f7051a310a132d16))
+* whole experience ([fd5bd78](https://github.com/JustSergioPB/atelier/commit/fd5bd787c924c9a2db2cf4b6b73ac4323b77f549))
+
 ## [0.4.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.3.0...atelier-v0.4.0) (2026-06-09)
 
 

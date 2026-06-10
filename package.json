@@ -2,7 +2,7 @@
   "name": "atelier",
   "type": "module",
   "packageManager": "pnpm@10.30.3",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "engines": {
     "node": ">=22.12.0"
   },

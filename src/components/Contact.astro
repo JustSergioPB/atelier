@@ -1,20 +1,82 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
 import Icon from "./Icon.astro";
-import { getTranslations } from "../i18n/ui";
-import { joinMiddot } from "../separators";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getTranslations, resolveLang } from "../i18n/ui";
+import { MIDDOT } from "../separators";
 import { contact, mailto } from "../contact";
+import { shared } from "../i18n/shared";
 
-const t = getTranslations(Astro.currentLocale).contact;
+const lang = resolveLang(Astro.currentLocale);
+const t = getTranslations(lang).contact;
+const f = getTranslations(lang).footer;
+const cookiesHref = getRelativeLocaleUrl(lang, "cookies");
+const year = new Date().getFullYear();
 ---
 
-<section id="contact">
+<footer id="contact">
   <SectionHeader num="06" label={t.label} title={t.title} />
   <p class="contact-lead">{t.lead}</p>
-  <p class="contact-sub">{t.sub}</p>
   <div class="hero-actions">
     <a class="btn btn-primary" href={mailto}>{t.emailCta} <Icon name="arrowRight" /></a>
     <a class="btn btn-ghost" href={contact.linkedin} target="_blank" rel="noopener">{t.linkedinCta}</a>
   </div>
-  <p class="contact-note">{joinMiddot(t.note)}</p>
-</section>
+  <div class="contact-bar">
+    <div class="contact-bar-meta">
+      <span class="contact-bar-text">{t.note} {MIDDOT} {shared.name} {MIDDOT} {f.role}</span>
+      <span class="contact-bar-copy">© {year} {shared.name}. {f.rights}</span>
+    </div>
+    <div class="contact-bar-links">
+      <button type="button" class="contact-bar-text contact-bar-btn" data-cookie-settings>{f.cookieSettings}</button>
+      <a class="contact-bar-text" href={cookiesHref}>{f.cookies}</a>
+      <a class="contact-bar-text" href={contact.linkedin} target="_blank" rel="noopener">{shared.brand.linkedin} <Icon name="arrowUpRight" /></a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Left column: meta line stacked over the copyright, both left-aligned */
+  .contact-bar-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .contact-bar-copy {
+    font-family: "Inter", sans-serif;
+    font-size: var(--t-caption);
+    color: var(--color-text-secondary);
+  }
+
+  .contact-bar-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    flex-wrap: wrap;
+  }
+
+  /* A button styled as a bar link — reopens the cookie banner.
+     appearance:none strips the native button look so it inherits the
+     .contact-bar-text typography (font, uppercase, letter-spacing) like the links. */
+  .contact-bar-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    line-height: inherit;
+    cursor: pointer;
+    color: var(--color-pop);
+    transition: color 0.15s ease;
+  }
+  .contact-bar-btn:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+  .contact-bar-btn:focus-visible {
+    outline: 2px solid var(--color-pop);
+    outline-offset: 2px;
+  }
+</style>

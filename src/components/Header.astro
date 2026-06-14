@@ -199,11 +199,31 @@ const closeLabel = t.header.close;
     background: var(--color-surface);
     color: var(--color-text-primary);
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    /* Sits on a solid ledge like the toggle controls — a physical object
+       resting on the page. */
+    transform: translateY(0);
+    box-shadow: 0 4px 0 0 var(--color-border), 0 6px 10px rgba(0, 0, 0, 0.16);
+    transition: color 0.15s ease, border-color 0.15s ease,
+      transform 0.08s ease, box-shadow 0.08s ease;
   }
 
-  .burger:hover { border-color: var(--color-pop); }
+  .burger:hover {
+    border-color: var(--color-pop);
+    /* Lift: taller ledge + bigger cast shadow reads as raised. */
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 0 var(--color-pop-deep), 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  .burger:active {
+    /* Press: cap drops onto the ledge, shadow collapses. */
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 0 var(--color-border), 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
   .burger:focus-visible { outline: 2px solid var(--color-pop); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .burger:hover,
+    .burger:active { transform: none; }
+  }
 
   .burger-box {
     position: relative;
@@ -279,15 +299,32 @@ const closeLabel = t.header.close;
     height: 36px;
     border: 1px solid var(--color-border);
     border-radius: 4px;
-    background: transparent;
+    background: var(--color-surface);
     color: var(--color-text-primary);
     cursor: pointer;
-    transition: border-color 0.15s ease;
+    /* Same ledge as the burger — physical object resting on the panel. */
+    transform: translateY(0);
+    box-shadow: 0 4px 0 0 var(--color-border), 0 6px 10px rgba(0, 0, 0, 0.16);
+    transition: border-color 0.15s ease, transform 0.08s ease,
+      box-shadow 0.08s ease;
   }
 
   .menu-close svg { width: 18px; height: 18px; }
-  .menu-close:hover { border-color: var(--color-pop); }
+  .menu-close:hover {
+    border-color: var(--color-pop);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 0 var(--color-pop-deep), 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  .menu-close:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 0 var(--color-border), 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
   .menu-close:focus-visible { outline: 2px solid var(--color-pop); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-close:hover,
+    .menu-close:active { transform: none; }
+  }
 
   .mobile-menu-controls {
     display: flex;

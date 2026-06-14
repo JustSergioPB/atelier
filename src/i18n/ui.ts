@@ -207,15 +207,15 @@ export const ui = {
       label: "Contact",
       title: "Let's shape your project",
       lead: "Whether you need help grounding a new idea from scratch or are looking for an engineer to integrate into your team and add value from day one, I’m open to discussing your proposal.",
-      sub: "Drop me an email or connect on LinkedIn. I usually get back to people quickly.",
       emailCta: "Send an email",
       linkedinCta: "View my LinkedIn",
-      note: ["Remote from Spain", "Available for project work and full-time contracts."],
+      note: "Remote from Spain",
     },
     footer: {
       role: "Software Engineer",
       cookies: "Cookies",
       cookieSettings: "Settings",
+      rights: "All rights reserved.",
     },
     notFound: {
       meta: {
@@ -477,15 +477,15 @@ export const ui = {
       label: "Contacto",
       title: "Impulsemos tu proyecto",
       lead: "Ya sea para incorporarme a tu equipo a tiempo parcial/completo o para colaborar en un proyecto técnico concreto, me interesa escuchar tu propuesta.",
-      sub: "Escríbeme por email o conectamos por LinkedIn. Suelo responder rápido.",
       emailCta: "Enviar un correo",
       linkedinCta: "Ver mi LinkedIn",
-      note: ["Remoto desde España", "Disponible para proyectos y contratos full-time."],
+      note: "Remoto desde España",
     },
     footer: {
       role: "Ingeniero de software",
       cookies: "Cookies",
       cookieSettings: "Configuración",
+      rights: "Todos los derechos reservados.",
     },
     notFound: {
       meta: {

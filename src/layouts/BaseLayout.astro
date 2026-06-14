@@ -93,8 +93,8 @@ const {
         });
         var selector =
           ".section-header, .about-lead, .about-body, .exp-item, .proj-card," +
-          " .approach-item, .ai-lead, .ai-item, .contact-lead, .contact-sub," +
-          " #contact .hero-actions, .contact-note, .footer";
+          " .approach-item, .ai-lead, .ai-item, .contact-lead," +
+          " #contact .hero-actions, .contact-bar";
         document.querySelectorAll(selector).forEach(function (el: Element) {
           el.classList.add("reveal");
           contentIO.observe(el);
@@ -105,31 +105,9 @@ const {
           threshold: 0,
           rootMargin: "0px 0px -10% 0px",
         });
-        document.querySelectorAll("section").forEach(function (el: Element) {
+        document.querySelectorAll("section, footer#contact").forEach(function (el: Element) {
           ruleIO.observe(el);
         });
-
-        // Pointer parallax — profile photo drifts with the cursor.
-        // Fine pointers only (skips touch).
-        var photo = document.querySelector(".about-photo") as HTMLElement | null;
-        if (photo && window.matchMedia("(pointer: fine)").matches) {
-          var nx = 0, ny = 0, scheduled = false;
-
-          function applyParallax() {
-            scheduled = false;
-            (photo as HTMLElement).style.translate =
-              (nx * 14).toFixed(1) + "px " + (ny * 14).toFixed(1) + "px";
-          }
-
-          window.addEventListener("mousemove", function (e: MouseEvent) {
-            nx = e.clientX / window.innerWidth - 0.5;   // -0.5 .. 0.5
-            ny = e.clientY / window.innerHeight - 0.5;
-            if (!scheduled) {
-              scheduled = true;
-              requestAnimationFrame(applyParallax);
-            }
-          }, { passive: true });
-        }
 
         // Hero: orchestrated entrance on load.
         var hero = document.querySelector(".hero");

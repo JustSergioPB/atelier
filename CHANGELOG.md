@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.8.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.7.0...atelier-v0.8.0) (2026-06-14)
+
+
+### Features
+
+* 3D toggable item ([6702e43](https://github.com/JustSergioPB/atelier/commit/6702e43a4cb8168b103551f3f278d226bbd66621))
+* diagrams for footer ([3a28893](https://github.com/JustSergioPB/atelier/commit/3a288934a13d1831bd1706d0a108266c6735b43e))
+* merged contact and footer ([53ac70d](https://github.com/JustSergioPB/atelier/commit/53ac70d942c1f09a8ef071992020e40c461aca85))
+
 ## [0.7.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.6.0...atelier-v0.7.0) (2026-06-14)
 
 

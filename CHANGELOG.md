@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.6.0...atelier-v0.7.0) (2026-06-14)
+
+
+### Features
+
+* late night improvements ([fada998](https://github.com/JustSergioPB/atelier/commit/fada998eed1fc1ceeaaa5145b3f54f133e6b77c4))
+
 ## [0.6.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.5.0...atelier-v0.6.0) (2026-06-10)
 
 

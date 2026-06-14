@@ -7,6 +7,28 @@ const t = getTranslations(Astro.currentLocale).about;
 ---
 
 <section id="about">
+  <!-- Decorative isometric "stacking layers" diagram — same line-art language
+       as the UML diagrams elsewhere. Anchored bottom-right, sits behind the
+       content. Top sheet carries the pop accent; the dashed rhombus is the
+       footprint. Layers breathe apart under .motion. -->
+  <svg class="about-layers" viewBox="0 0 360 340" fill="none" aria-hidden="true" focusable="false">
+    <!-- footprint (dashed, fixed) -->
+    <g class="about-lyr about-lyr--base">
+      <path class="about-lyr-base" d="M180 212 L300 260 L180 308 L60 260 Z" />
+    </g>
+
+    <!-- middle sheet -->
+    <g class="about-lyr about-lyr--mid">
+      <path class="about-lyr-side" d="M60 190 L60 202 L180 250 L300 202 L300 190 Z" />
+      <path class="about-lyr-face" d="M180 142 L300 190 L180 238 L60 190 Z" />
+    </g>
+
+    <!-- top sheet (accent) -->
+    <g class="about-lyr about-lyr--top">
+      <path class="about-lyr-side" d="M60 120 L60 132 L180 180 L300 132 L300 120 Z" />
+      <path class="about-lyr-face" d="M180 72 L300 120 L180 168 L60 120 Z" />
+    </g>
+  </svg>
   <div class="about-wrap">
     <div class="about-headrow">
       <img class="about-photo" src="/profile-pic.webp" alt={shared.name} width="160" height="160" loading="lazy" />

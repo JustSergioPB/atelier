@@ -285,6 +285,8 @@ section:not(:first-of-type)::before {
 
 .about-wrap {
   max-width: 1000px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Photo sits to the left of the section title */
@@ -549,6 +551,92 @@ section:not(:first-of-type)::before {
   line-height: 1.45;
   color: var(--color-text-tertiary);
 }
+
+/* Isometric stacking-layers diagram — decorative bg, anchored bottom-right
+   behind the About copy. Faded toward the text (left + top) like the UML art. */
+#about { overflow: hidden; }
+.about-layers {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(360px, 44vw, 560px);
+  height: auto;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  color: var(--color-text-tertiary);
+  overflow: visible;
+  /* Fade toward the text (left) and soften both vertical edges so the
+     centered diagram blends into the section. */
+  -webkit-mask-image: linear-gradient(to left, #000 45%, transparent 95%),
+                      linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to left, #000 45%, transparent 95%),
+              linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
+  mask-composite: intersect;
+}
+
+@media (max-width: 720px) {
+  /* Drop to the bottom-right corner — vertical centering hides it behind the
+     copy on mobile. Anchor it level with the last stat instead. */
+  .about-layers {
+    width: 78vw;
+    opacity: 0.32;
+    top: auto;
+    bottom: 0;
+    transform: none;
+  }
+}
+
+/* Top face = surface; thickness side = raised surface — reads as a solid sheet */
+.about-lyr-face {
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  fill: var(--color-surface);
+}
+.about-lyr-side {
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  fill: var(--color-surface-raised);
+}
+/* Footprint — dashed rhombus, no thickness */
+.about-lyr-base {
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  stroke-dasharray: 5 6;
+  fill: none;
+  opacity: 0.7;
+}
+
+/* Top sheet carries the pop accent (like the highlighted layer in the ref) */
+.about-lyr--top .about-lyr-face {
+  stroke: var(--color-pop);
+  fill: var(--color-pop);
+  fill-opacity: 0.1;
+}
+.about-lyr--top .about-lyr-side {
+  stroke: var(--color-pop);
+  fill: var(--color-pop);
+  fill-opacity: 0.2;
+}
+
+/* Layers breathe apart, then recompress — an idle "stacking" loop.
+   Same phase, different amplitude → gentle accordion. Footprint stays put. */
+@keyframes about-stack {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(var(--lift, 0)); }
+}
+.motion .about-lyr {
+  animation: about-stack 4.2s ease-in-out infinite;
+  will-change: transform;
+}
+.motion .about-lyr--top { --lift: -14px; animation-delay: -0.2s; }
+.motion .about-lyr--mid { --lift: -6px; }
+.motion .about-lyr--base { --lift: 0px; }
 
 /* ─────────────────────────────────────────
    EXPERIENCE

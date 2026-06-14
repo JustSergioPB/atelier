@@ -50,7 +50,7 @@ export const ui = {
     },
     about: {
       label: "About me",
-      title: "Real engineering, no shortcuts",
+      title: "From the database to the screen",
       lead: [
         { text: "I handle software " },
         { text: "at every layer", mark: true },
@@ -321,7 +321,7 @@ export const ui = {
     },
     about: {
       label: "Sobre mí",
-      title: "Ingeniería real, sin rodeos",
+      title: "De la base de datos a la pantalla",
       lead: [
         { text: "Me encargo del software " },
         { text: "en todas sus capas", mark: true },

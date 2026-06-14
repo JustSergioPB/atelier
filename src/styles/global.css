@@ -566,6 +566,7 @@ section:not(:first-of-type)::before {
   pointer-events: none;
   opacity: 0.5;
   color: var(--color-text-tertiary);
+  filter: saturate(1.25);
   overflow: visible;
   /* Fade toward the text (left) and soften both vertical edges so the
      centered diagram blends into the section. */
@@ -577,15 +578,20 @@ section:not(:first-of-type)::before {
   mask-composite: intersect;
 }
 
-@media (max-width: 720px) {
-  /* Drop to the bottom-right corner — vertical centering hides it behind the
-     copy on mobile. Anchor it level with the last stat instead. */
+@media (max-width: 1024px) {
+  /* Drop to the bottom-right corner — vertical centering crowds the copy on
+     tablets + mobile. Anchor it level with the last stat instead. */
   .about-layers {
-    width: 78vw;
-    opacity: 0.32;
     top: auto;
     bottom: 0;
     transform: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .about-layers {
+    width: 78vw;
+    opacity: 0.32;
   }
 }
 

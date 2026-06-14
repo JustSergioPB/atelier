@@ -54,6 +54,25 @@ const closeLabel = t.header.close;
 </aside>
 
 <script>
+  // Publish the sticky header's height as --header-h so the hero can size
+  // itself to the remaining viewport. Re-measures on resize and font swap.
+  (function () {
+    var header = document.querySelector(".site-header") as HTMLElement | null;
+    if (!header) return;
+    function setHeaderH() {
+      document.documentElement.style.setProperty(
+        "--header-h",
+        header!.offsetHeight + "px"
+      );
+    }
+    setHeaderH();
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(setHeaderH).observe(header);
+    } else {
+      window.addEventListener("resize", setHeaderH);
+    }
+  })();
+
   // Off-canvas menu: open/close, with the usual escape hatches (overlay click,
   // Escape key, following a nav link). Focus moves into the panel on open and
   // back to the burger on close.

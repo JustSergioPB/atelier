@@ -44,7 +44,6 @@ export const ui = {
         { text: "last", mark: true },
       ],
       titleSpan: "Complete development, without cutting corners.",
-      sub: "I’ve spent seven years taking projects from database to interface. I build software methodically: readable code, solid test coverage, and architectures designed to be easy to maintain down the road.",
       byline: "Remote from Spain",
       ctaPrimary: "Get in touch",
       ctaSecondary: "LinkedIn",
@@ -61,7 +60,7 @@ export const ui = {
       ],
       body: [
         "Over the past seven years as an engineer, I’ve worked on a bit of everything: backend, frontend, and mobile. Over time you learn that tools change, but what really matters stays the same: understanding business constraints, choosing the right technical approach, and building something that actually holds up in production.",
-        "I don't chase framework trends. I care about whether a solution is correct, maintainable, and efficient for the actual problem in front of me. Picking up a new technical domain or switching technologies is just part of the job — a means to an end, never the end itself.",
+        "I don't chase framework trends. I care about whether a solution is correct, maintainable, and efficient for the actual problem in front of me: readable code, solid test coverage, and architecture built to be easy to maintain down the road. Picking up a new technical domain or switching technologies is just part of the job — a means to an end, never the end itself.",
       ],
     },
     experience: {
@@ -315,7 +314,6 @@ export const ui = {
         { text: "durar", mark: true },
       ],
       titleSpan: "Desarrollo completo, sin dejar cabos sueltos.",
-      sub: "Llevo siete años encargándome de los proyectos desde la base de datos hasta la interfaz. Construyo software de forma metódica: código legible, bien testeado y pensado para que sea fácil de mantener en el futuro.",
       byline: "Remoto desde España",
       ctaPrimary: "Hablemos",
       ctaSecondary: "LinkedIn",
@@ -332,7 +330,7 @@ export const ui = {
       ],
       body: [
         "En estos siete años como ingeniero he tocado un poco de todo: backend, frontend, infrastructura y móvil. Con el tiempo aprendes que las herramientas cambian, pero lo verdaderamente importante se mantiene: entender las restricciones del negocio, elegir el enfoque técnico adecuado y construir algo que aguante el tipo en producción.",
-        "No sigo modas de frameworks. Me importa que la solución sea correcta, mantenible y eficiente para el caso real que tengo delante. Aprender un nuevo dominio técnico o cambiar de tecnología es solo parte del trabajo; el objetivo siempre es aportar valor, no coleccionar logos en el CV.",
+        "No sigo modas de frameworks. Me importa que la solución sea correcta, mantenible y eficiente para el caso real que tengo delante: código legible, bien testeado y pensado para que sea fácil de mantener en el futuro. Aprender un nuevo dominio técnico o cambiar de tecnología es solo parte del trabajo; el objetivo siempre es aportar valor, no coleccionar logos en el CV.",
       ],
     },
     experience: {

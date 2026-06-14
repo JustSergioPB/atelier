@@ -42,12 +42,20 @@ const t = getTranslations(Astro.currentLocale).approach;
       return node;
     }
 
-    function defs() {
+    function defs(gw: number, gh: number) {
       var d = document.createElementNS(NS, "defs");
       // Glow only — the pulse uses a solid stroke so the lit segment stays
       // uniformly bright as it travels the whole rail (a positional gradient
       // would only light up where the dash crosses the path's midpoint).
-      var f = el("filter", { id: "apx-glow", x: "-50%", y: "-50%", width: "200%", height: "200%" });
+      // userSpaceOnUse (not the default objectBoundingBox): a stacked, single
+      // column layout makes each beam a purely vertical path with a zero-width
+      // bbox, which would collapse a percentage-based filter region to nothing
+      // and hide the pulse. An explicit region over the whole grid avoids that.
+      var f = el("filter", {
+        id: "apx-glow",
+        filterUnits: "userSpaceOnUse",
+        x: -8, y: -8, width: gw + 16, height: gh + 16,
+      });
       f.appendChild(el("feGaussianBlur", { stdDeviation: "2.4", result: "b" }));
       var m = el("feMerge", {});
       m.appendChild(el("feMergeNode", { in: "b" }));
@@ -57,10 +65,14 @@ const t = getTranslations(Astro.currentLocale).approach;
       return d;
     }
 
-    function rel(node: HTMLElement, gb: DOMRect) {
-      var r = node.getBoundingClientRect();
-      var l = r.left - gb.left, t = r.top - gb.top;
-      return { l: l, t: t, r: l + r.width, b: t + r.height, cx: l + r.width / 2, cy: t + r.height / 2 };
+    // Measure via offset* (the static layout box) rather than
+    // getBoundingClientRect, which folds in the cards' scroll-reveal transform.
+    // The grid is position:relative, so it's the offsetParent of each card and
+    // these coordinates already sit in the SVG's viewBox space.
+    function rel(node: HTMLElement) {
+      var l = node.offsetLeft, t = node.offsetTop;
+      var w = node.offsetWidth, h = node.offsetHeight;
+      return { l: l, t: t, r: l + w, b: t + h, cx: l + w / 2, cy: t + h / 2 };
     }
 
     function wire(d: string, delay: number) {
@@ -77,12 +89,12 @@ const t = getTranslations(Astro.currentLocale).approach;
 
     function build() {
       while (svg!.firstChild) svg!.removeChild(svg!.firstChild);
-      var gb = grid!.getBoundingClientRect();
-      if (!gb.width || items.length < 3) return;
+      var gw = grid!.offsetWidth, gh = grid!.offsetHeight;
+      if (!gw || items.length < 3) return;
 
-      var r = items.map(function (it) { return rel(it, gb); });
-      svg!.setAttribute("viewBox", "0 0 " + gb.width + " " + gb.height);
-      svg!.appendChild(defs());
+      var r = items.map(function (it) { return rel(it); });
+      svg!.setAttribute("viewBox", "0 0 " + gw + " " + gh);
+      svg!.appendChild(defs(gw, gh));
 
       // The lowest card is the stem target; the other two form the bar.
       var bi = 0;
@@ -126,11 +138,7 @@ const t = getTranslations(Astro.currentLocale).approach;
     }
     if ("ResizeObserver" in window) new ResizeObserver(schedule).observe(grid);
     window.addEventListener("resize", schedule);
-    // Cards slide up via a staggered scroll-reveal (transform). That moves them
-    // without resizing the grid, so the ResizeObserver never fires — recompute
-    // when each card's reveal transition settles or the beams go stale.
-    grid.addEventListener("transitionend", function (e) {
-      if ((e as TransitionEvent).propertyName === "transform") schedule();
-    });
+    // The cards' scroll-reveal is transform-only, so it never changes the layout
+    // box we measure — no need to recompute the beams during the reveal.
   })();
 </script>

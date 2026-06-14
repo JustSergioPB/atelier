@@ -109,9 +109,9 @@ const {
           ruleIO.observe(el);
         });
 
-        // Pointer parallax — hero photo drifts with the cursor.
+        // Pointer parallax — profile photo drifts with the cursor.
         // Fine pointers only (skips touch).
-        var photo = document.querySelector(".hero-photo") as HTMLElement | null;
+        var photo = document.querySelector(".about-photo") as HTMLElement | null;
         if (photo && window.matchMedia("(pointer: fine)").matches) {
           var nx = 0, ny = 0, scheduled = false;
 

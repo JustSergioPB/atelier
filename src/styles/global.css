@@ -199,7 +199,7 @@ section:not(:first-of-type)::before {
 ───────────────────────────────────────── */
 
 /* #1 Pointer parallax target gets a smooth ease on the JS-driven translate */
-.motion .hero-photo { transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+.motion .about-photo { transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
 
 /* #2 Red accents get a slow lighter-red shimmer sweeping across the glyphs */
 @keyframes accent-shimmer {
@@ -271,20 +271,137 @@ section:not(:first-of-type)::before {
 /* ─────────────────────────────────────────
    HERO
 ───────────────────────────────────────── */
-.hero { position: relative; padding: 0 0 var(--space-l); border-top: none; }
+.hero {
+  position: relative;
+  padding: 0 0 var(--space-l);
+  border-top: none;
+  /* Fill the viewport below the sticky header. Subtract the measured header
+     height (--header-h, set by Header.astro) and the .page top padding so the
+     hero's bottom lands at the fold. Content is centered in the leftover space. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100dvh - var(--header-h, 64px) - var(--space-l));
+  /* Clip the background diagram where it bleeds past the hero (prevents
+     horizontal overflow on mobile). */
+  overflow: hidden;
+}
 
-.hero-photo {
-  position: absolute;
-  right: 0;
-  bottom: var(--space-l);
-  width: 160px;
-  height: 160px;
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-l);
+  align-items: start;
+}
+
+/* Photo sits to the left of the section title */
+.about-headrow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-m);
+  margin-bottom: var(--space-m);
+}
+
+.about-photo {
+  flex-shrink: 0;
+  width: clamp(96px, 11vw, 150px);
+  height: clamp(96px, 11vw, 150px);
   border-radius: 50%;
   object-fit: cover;
 }
 
+/* When there's room: column 1 = photo + title + lead, column 2 = body */
+@media (min-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    column-gap: var(--space-xl);
+  }
+  .about-col-body { padding-top: var(--space-xs); }
+  .about-col-body .about-body { margin-left: 0; }
+}
+
+/* Decorative UML sequence diagram — anchored bottom-right, sits behind content */
+.hero-uml {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: clamp(520px, 66vw, 940px);
+  height: auto;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.16;
+  color: var(--color-text-tertiary);
+  /* Fade toward the text (left + top) so the diagram stays in its corner
+     and doesn't compete with the hero copy. */
+  -webkit-mask-image: linear-gradient(to left, #000 38%, transparent 92%),
+                      linear-gradient(to top, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to left, #000 38%, transparent 92%),
+              linear-gradient(to top, #000 70%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.hero-uml .uml-class rect { stroke: currentColor; stroke-width: 1; }
+.hero-uml .uml-life { stroke: currentColor; stroke-width: 1; stroke-dasharray: 4 5; }
+.hero-uml .uml-activation { stroke: currentColor; stroke-width: 1; fill: var(--color-bg); }
+.hero-uml .uml-edge { stroke: currentColor; stroke-width: 1; }
+.hero-uml .uml-return { stroke: currentColor; stroke-width: 1; stroke-dasharray: 5 4; }
+.hero-uml .uml-arrow { fill: currentColor; }
+.hero-uml .uml-name {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  fill: currentColor;
+}
+.hero-uml .uml-msg {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 12px;
+  fill: currentColor;
+}
+
 @media (max-width: 720px) {
-  .hero-photo { position: static; margin-top: var(--space-m); width: 96px; height: 96px; }
+  /* Stays visible on mobile: anchored in the bottom-right corner, bleeding
+     off the right edge, faded toward the text via the mask. */
+  .hero-uml { width: 115vw; opacity: 0.12; }
+}
+
+/* Class diagram — mobile only, top-left corner */
+.hero-cls { display: none; }
+
+.hero-cls .uml-class rect,
+.hero-cls .uml-class line { stroke: currentColor; stroke-width: 1; }
+.hero-cls .uml-edge { stroke: currentColor; stroke-width: 1; }
+.hero-cls .uml-arrow { fill: currentColor; }
+.hero-cls .uml-tri { stroke: currentColor; stroke-width: 1; fill: var(--color-bg); }
+.hero-cls .uml-name {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  fill: currentColor;
+}
+.hero-cls .uml-attr {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 11px;
+  fill: currentColor;
+}
+
+@media (max-width: 720px) {
+  .hero-cls {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 64vw;
+    height: auto;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.12;
+    color: var(--color-text-tertiary);
+    /* Fade downward only — dissolves the lower (Button) class as it nears the
+       text; Theme on the right stays crisp. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
 }
 
 .hero-eyebrow {
@@ -305,7 +422,12 @@ section:not(:first-of-type)::before {
   letter-spacing: -0.05em;
   color: var(--color-text-primary);
   margin-bottom: var(--space-m);
+  /* Keep the copy off the right side on wide screens so it doesn't run into
+     the background diagram. */
+  max-width: min(100%, 10ch);
 }
+
+.hero-title span { max-width: 22ch; }
 
 .hero-title .hl { color: var(--color-pop); font-weight: inherit; }
 
@@ -314,18 +436,8 @@ section:not(:first-of-type)::before {
   font-weight: 300;
   color: var(--color-text-tertiary);
   letter-spacing: -0.01em;
-  font-size: 0.46em;
-  margin-top: 0.4em;
-}
-
-.hero-sub {
-  font-family: "Inter", sans-serif;
-  font-size: var(--t-subhead);
-  font-weight: 300;
-  color: var(--color-text-tertiary);
-  max-width: 520px;
-  line-height: 1.75;
-  margin-bottom: var(--space-m);
+  font-size: 0.36em;
+  margin-top: 0.5em;
 }
 
 .hero-byline {
@@ -474,6 +586,7 @@ section:not(:first-of-type)::before {
 
 /* Tiles override the list styling: cards with an accent top edge */
 .exp-bento .exp-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
@@ -484,12 +597,49 @@ section:not(:first-of-type)::before {
   border: 1px solid var(--color-border);
   border-top: 3px solid var(--color-accent);
   border-radius: 2px;
-  transition: transform 0.2s ease, border-top-color 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .exp-bento .exp-item:hover {
   transform: translateY(-3px);
-  border-top-color: var(--color-pop);
+}
+
+/* Beam that sweeps across the top border on hover/focus (top edge only). */
+.exp-bento .exp-item::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -1px;
+  right: -1px;
+  height: 3px;
+  border-radius: 2px 2px 0 0;
+  /* Match the Approach pulse: one solid dash (pop) with a glow, traveling the
+     rail. The gap (tile width − dash) is wider than the widest tile, so only
+     one beam is ever visible. Shift by exactly one tile → seamless loop. */
+  background: linear-gradient(
+    90deg,
+    transparent 0,
+    var(--color-pop) 60px,
+    var(--color-pop) 300px,
+    transparent 360px
+  );
+  background-size: 1300px 100%;
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  filter: drop-shadow(0 0 3px var(--color-pop));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.exp-bento .exp-item:hover::before,
+.exp-bento .exp-item:focus-within::before {
+  opacity: 1;
+  animation: exp-beam 4s linear infinite;
+}
+
+@keyframes exp-beam {
+  to { background-position: 1300px 0; }
 }
 
 .exp-bento .exp-desc { max-width: none; }
@@ -563,6 +713,13 @@ section:not(:first-of-type)::before {
   z-index: 0;
   pointer-events: none;
   overflow: visible;
+}
+/* When motion is on, the beams fade in with the section reveal — slightly after
+   the cards begin appearing — instead of sitting there before the content. */
+.motion #approach .approach-links { opacity: 0; }
+.motion #approach.is-visible .approach-links {
+  opacity: 1;
+  transition: opacity 0.6s ease 0.25s;
 }
 .apx-wire {
   fill: none;
@@ -989,6 +1146,11 @@ section:not(:first-of-type)::before {
   .proj-flip { transition: none; }
   .proj-card:hover::before,
   .proj-card:focus-within::before {
+    animation: none;
+    background: var(--color-pop);
+  }
+  .exp-bento .exp-item:hover::before,
+  .exp-bento .exp-item:focus-within::before {
     animation: none;
     background: var(--color-pop);
   }

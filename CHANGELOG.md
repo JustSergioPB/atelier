@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/JustSergioPB/atelier/compare/atelier-v0.9.0...atelier-v0.9.1) (2026-06-14)
+
+
+### Bug Fixes
+
+* visibility correction for the about animation ([80b0205](https://github.com/JustSergioPB/atelier/commit/80b020527f51261c2abcd8566e9d0d135e489650))
+
 ## [0.9.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.8.0...atelier-v0.9.0) (2026-06-14)
 
 

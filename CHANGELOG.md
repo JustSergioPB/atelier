@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.5.0...atelier-v0.6.0) (2026-06-10)
+
+
+### Features
+
+* added side projects cards ([fe168b9](https://github.com/JustSergioPB/atelier/commit/fe168b943e0109b7177271aeaac08c324bd67cba))
+* space improvements ([3f4be2b](https://github.com/JustSergioPB/atelier/commit/3f4be2bc1ddfe846ea38ca3cc9038a27c16baf25))
+* ui enhancements ([6691665](https://github.com/JustSergioPB/atelier/commit/6691665abc3859bd70704f6cbd881224d9705ab7))
+* ui enhancements ([4ac6411](https://github.com/JustSergioPB/atelier/commit/4ac64110fc8d59506cf5964970d3c08e855d3794))
+
 ## [0.5.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.4.0...atelier-v0.5.0) (2026-06-10)
 
 

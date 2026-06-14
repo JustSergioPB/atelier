@@ -455,6 +455,7 @@ section:not(:first-of-type)::before {
 .hero-actions { display: flex; gap: var(--space-s); flex-wrap: wrap; }
 
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -465,25 +466,59 @@ section:not(:first-of-type)::before {
   text-transform: uppercase;
   text-decoration: none;
   padding: 12px 22px;
-  border-radius: 2px;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  border-radius: 3px;
+  /* The button sits on a solid ledge (--btn-ledge). Pressing it down
+     translates the cap toward the ledge, shrinking the visible thickness. */
+  transform: translateY(0);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    transform 0.08s ease, box-shadow 0.08s ease;
 }
 
 .btn-primary {
   background: var(--color-pop);
   color: #fff;
-  border: 1px solid var(--color-pop);
+  border: 1px solid var(--color-pop-deep);
+  /* 5px ledge in the deep shade = the button's edge/thickness. */
+  box-shadow: 0 5px 0 0 var(--color-pop-deep), 0 7px 12px rgba(0, 0, 0, 0.28);
 }
-.btn-primary:hover { background: var(--color-pop-deep); border-color: var(--color-pop-deep); }
+.btn-primary:hover {
+  background: var(--color-pop-deep);
+  /* Lift: taller ledge + bigger cast shadow reads as raised. */
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 0 #7d1424, 0 9px 16px rgba(0, 0, 0, 0.32);
+}
+.btn-primary:active {
+  /* Press: cap drops onto the ledge, shadow collapses. */
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 0 var(--color-pop-deep), 0 1px 3px rgba(0, 0, 0, 0.3);
+}
 
 .btn-ghost {
-  background: transparent;
+  background: var(--color-surface);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
+  box-shadow: 0 5px 0 0 var(--color-border), 0 7px 12px rgba(0, 0, 0, 0.18);
 }
-.btn-ghost:hover { border-color: var(--color-pop); color: var(--color-pop); }
+.btn-ghost:hover {
+  border-color: var(--color-pop);
+  color: var(--color-pop);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 0 var(--color-pop-deep), 0 9px 16px rgba(0, 0, 0, 0.22);
+}
+.btn-ghost:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 0 var(--color-border), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
 
 .btn:focus-visible { outline: 2px solid var(--color-pop); outline-offset: 2px; }
+
+/* No bob/press animation when the user opts out of motion. */
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary:hover,
+  .btn-ghost:hover,
+  .btn-primary:active,
+  .btn-ghost:active { transform: none; }
+}
 
 /* ─────────────────────────────────────────
    ABOUT

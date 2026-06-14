@@ -42,6 +42,9 @@ const slug = rest.replace(/^\/+/, "").replace(/\/+$/, "");
     border: 1px solid var(--color-border);
     border-radius: 4px;
     padding: 2px;
+    /* Sits on a solid ledge like the CTA buttons — the control is a physical
+       object resting on the page. */
+    box-shadow: 0 4px 0 0 var(--color-border), 0 6px 10px rgba(0, 0, 0, 0.16);
   }
 
   .lang-opt {
@@ -57,15 +60,24 @@ const slug = rest.replace(/^\/+/, "").replace(/\/+$/, "");
     letter-spacing: 0.12em;
     text-decoration: none;
     color: var(--color-text-tertiary);
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.08s ease;
   }
 
   .lang-opt:hover { color: var(--color-text-secondary); }
 
+  /* Press: the segment dips toward the ledge. */
+  .lang-opt:active { transform: translateY(2px); }
+
   .lang-opt[aria-current="true"] {
     background: var(--color-surface-raised);
     color: var(--color-text-primary);
+    /* Selected segment reads as pushed in — recessed into the control. */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.28);
   }
 
   .lang-opt:focus-visible { outline: 2px solid var(--color-pop); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lang-opt:active { transform: none; }
+  }
 </style>

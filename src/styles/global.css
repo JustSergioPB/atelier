@@ -1269,8 +1269,104 @@ section:not(:first-of-type)::before {
    since this is no longer a <section>. Trailing space is trimmed. */
 footer#contact {
   position: relative;
-  padding: var(--space-xl) 0 var(--space-m);
+  padding: var(--space-xl) 0 0;
   scroll-margin-top: 72px;
+  /* Clip the decorative diagrams where they bleed past the footer edges
+     (prevents horizontal overflow on mobile). */
+  overflow: hidden;
+}
+
+/* Decorative UML activity diagram — anchored bottom-right, sits behind content */
+.contact-uml {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: clamp(520px, 60vw, 900px);
+  height: auto;
+  z-index: -1;
+  pointer-events: none;
+  /* Sparser line art than Hero's dense sequence diagram, so it needs a touch
+     more opacity to read with the same visual weight in both themes. */
+  opacity: 0.4;
+  color: var(--color-text-secondary);
+  /* Fade toward the text (left + top) so the diagram stays in its corner. */
+  -webkit-mask-image: linear-gradient(to left, #000 38%, transparent 92%),
+                      linear-gradient(to top, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to left, #000 38%, transparent 92%),
+              linear-gradient(to top, #000 70%, transparent 100%);
+  mask-composite: intersect;
+}
+.contact-uml .uml-init { fill: currentColor; }
+.contact-uml .uml-action { stroke: currentColor; stroke-width: 1; fill: none; }
+.contact-uml .uml-decision { stroke: currentColor; stroke-width: 1; fill: var(--color-bg); }
+.contact-uml .uml-edge { stroke: currentColor; stroke-width: 1; }
+.contact-uml .uml-arrow { fill: currentColor; }
+.contact-uml .uml-final-ring { stroke: currentColor; stroke-width: 1; }
+.contact-uml .uml-final-dot { fill: currentColor; }
+.contact-uml .uml-name {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  fill: currentColor;
+}
+.contact-uml .uml-msg {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 12px;
+  fill: currentColor;
+}
+
+@media (max-width: 720px) {
+  .contact-uml { width: 115vw; opacity: 0.32; }
+}
+
+/* Laptops and up: pull the visible area harder into the right corner so the
+   diagram's left tail clears the contact copy instead of running under it. */
+@media (min-width: 1024px) {
+  .contact-uml {
+    -webkit-mask-image: linear-gradient(to left, #000 18%, transparent 64%),
+                        linear-gradient(to top, #000 70%, transparent 100%);
+    mask-image: linear-gradient(to left, #000 18%, transparent 64%),
+                linear-gradient(to top, #000 70%, transparent 100%);
+  }
+}
+
+/* State machine diagram — mobile only, top-left corner */
+.contact-sm { display: none; }
+.contact-sm .uml-init { fill: currentColor; }
+.contact-sm .uml-state { stroke: currentColor; stroke-width: 1; fill: none; }
+.contact-sm .uml-edge { stroke: currentColor; stroke-width: 1; }
+.contact-sm .uml-arrow { fill: currentColor; }
+.contact-sm .uml-final-ring { stroke: currentColor; stroke-width: 1; }
+.contact-sm .uml-final-dot { fill: currentColor; }
+.contact-sm .uml-name {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  fill: currentColor;
+}
+.contact-sm .uml-msg {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 11px;
+  fill: currentColor;
+}
+
+@media (max-width: 720px) {
+  .contact-sm {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: var(--space-l);
+    width: 64vw;
+    height: auto;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.32;
+    color: var(--color-text-secondary);
+    /* Fade downward — dissolves the lower states as they near the text. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
 }
 footer#contact::before {
   content: "";

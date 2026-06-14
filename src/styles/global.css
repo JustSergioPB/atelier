@@ -283,11 +283,8 @@ section:not(:first-of-type)::before {
   overflow: hidden;
 }
 
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-l);
-  align-items: start;
+.about-wrap {
+  max-width: 1000px;
 }
 
 /* Photo sits to the left of the section title */
@@ -304,16 +301,6 @@ section:not(:first-of-type)::before {
   height: clamp(96px, 11vw, 150px);
   border-radius: 50%;
   object-fit: cover;
-}
-
-/* When there's room: column 1 = photo + title + lead, column 2 = body */
-@media (min-width: 900px) {
-  .about-grid {
-    grid-template-columns: 1.15fr 0.85fr;
-    column-gap: var(--space-xl);
-  }
-  .about-col-body { padding-top: var(--space-xs); }
-  .about-col-body .about-body { margin-left: 0; }
 }
 
 /* Decorative UML sequence diagram — anchored bottom-right, sits behind content */
@@ -532,18 +519,36 @@ section:not(:first-of-type)::before {
 
 .about-lead .accent { color: var(--color-pop); font-weight: 600; }
 
-.about-body {
-  font-family: "Inter", sans-serif;
-  font-size: var(--t-body);
-  font-weight: 300;
-  line-height: 1.85;
-  color: var(--color-text-tertiary);
-  max-width: 58ch;
-  /* Asymmetry: body steps off the left axis, away from the lead */
-  margin-left: clamp(0px, 14vw, 180px);
+/* Stats read like a spec sheet — a top rule per figure, tight Grotesk numerals */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-m);
+  max-width: 760px;
 }
 
-.about-body + .about-body { margin-top: var(--space-s); }
+.about-stat {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-s);
+}
+
+.about-stat-value {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+}
+
+.about-stat-label {
+  margin: var(--space-xs) 0 0;
+  font-family: "Inter", sans-serif;
+  font-size: var(--t-caption);
+  font-weight: 300;
+  line-height: 1.45;
+  color: var(--color-text-tertiary);
+}
 
 /* ─────────────────────────────────────────
    EXPERIENCE
@@ -1412,6 +1417,6 @@ a.contact-bar-text:focus-visible { outline: 2px solid var(--color-pop); outline-
 
   .ai-item { grid-template-columns: 1fr; gap: var(--space-xs); }
 
-  /* Asymmetry collapses to clean left-aligned stacks on small screens */
-  .about-body { margin-left: 0; }
+  /* Stats stack into a single spec column on small screens */
+  .about-stats { grid-template-columns: 1fr; gap: var(--space-s); }
 }

@@ -58,9 +58,10 @@ export const ui = {
           text: " — from modeling the data and background services to polishing the user interface, applying the same engineering standards to every step.",
         },
       ],
-      body: [
-        "Over the past seven years as an engineer, I’ve worked on a bit of everything: backend, frontend, and mobile. Over time you learn that tools change, but what really matters stays the same: understanding business constraints, choosing the right technical approach, and building something that actually holds up in production.",
-        "I don't chase framework trends. I care about whether a solution is correct, maintainable, and efficient for the actual problem in front of me: readable code, solid test coverage, and architecture built to be easy to maintain down the road. Picking up a new technical domain or switching technologies is just part of the job — a means to an end, never the end itself.",
+      stats: [
+        { value: "7+", label: "Years engineering" },
+        { value: "Full-stack", label: "Front, back & mobile" },
+        { value: "8+", label: "Production projects" },
       ],
     },
     experience: {
@@ -328,9 +329,10 @@ export const ui = {
           text: ": desde modelar los datos y servicios de fondo hasta pulir la interfaz que ve el usuario, aplicando el mismo nivel de exigencia en cada paso.",
         },
       ],
-      body: [
-        "En estos siete años como ingeniero he tocado un poco de todo: backend, frontend, infrastructura y móvil. Con el tiempo aprendes que las herramientas cambian, pero lo verdaderamente importante se mantiene: entender las restricciones del negocio, elegir el enfoque técnico adecuado y construir algo que aguante el tipo en producción.",
-        "No sigo modas de frameworks. Me importa que la solución sea correcta, mantenible y eficiente para el caso real que tengo delante: código legible, bien testeado y pensado para que sea fácil de mantener en el futuro. Aprender un nuevo dominio técnico o cambiar de tecnología es solo parte del trabajo; el objetivo siempre es aportar valor, no coleccionar logos en el CV.",
+      stats: [
+        { value: "7+", label: "Años de ingeniería" },
+        { value: "Full-stack", label: "Front, back y móvil" },
+        { value: "8+", label: "Proyectos en producción" },
       ],
     },
     experience: {

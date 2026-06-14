@@ -7,18 +7,21 @@ const t = getTranslations(Astro.currentLocale).about;
 ---
 
 <section id="about">
-  <div class="about-grid">
-    <div class="about-col-main">
-      <div class="about-headrow">
-        <img class="about-photo" src="/profile-pic.webp" alt={shared.name} width="160" height="160" loading="lazy" />
-        <SectionHeader num="01" label={t.label} title={t.title} />
-      </div>
-      <p class="about-lead">
-        {t.lead.map((seg) => (seg.mark ? <span class="accent">{seg.text}</span> : seg.text))}
-      </p>
+  <div class="about-wrap">
+    <div class="about-headrow">
+      <img class="about-photo" src="/profile-pic.webp" alt={shared.name} width="160" height="160" loading="lazy" />
+      <SectionHeader num="01" label={t.label} title={t.title} />
     </div>
-    <div class="about-col-body">
-      {t.body.map((paragraph) => <p class="about-body">{paragraph}</p>)}
-    </div>
+    <p class="about-lead">
+      {t.lead.map((seg) => (seg.mark ? <span class="accent">{seg.text}</span> : seg.text))}
+    </p>
+    <dl class="about-stats">
+      {t.stats.map((stat) => (
+        <div class="about-stat">
+          <dt class="about-stat-value">{stat.value}</dt>
+          <dd class="about-stat-label">{stat.label}</dd>
+        </div>
+      ))}
+    </dl>
   </div>
 </section>

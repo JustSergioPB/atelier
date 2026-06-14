@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.8.0...atelier-v0.9.0) (2026-06-14)
+
+
+### Features
+
+* improved about me section ([beef5cb](https://github.com/JustSergioPB/atelier/commit/beef5cbcf64102c8ac97a1a8aa3058c559eaf82a))
+* polished about me ([91d3944](https://github.com/JustSergioPB/atelier/commit/91d394444882138a8ba5b80c5184bf1d2c645907))
+
 ## [0.8.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.7.0...atelier-v0.8.0) (2026-06-14)
 
 

@@ -227,8 +227,8 @@ Copy lives in `src/i18n/` (never hardcoded). Tone: professional, authoritative, 
 
 Visual/UX references that informed this system. Not canonical — ideas only.
 
-[AltiusLabs](https://www.altiuslabs.xyz/) - Low fidelity drawings
-[MakingSoftware](https://www.makingsoftware.com/) - Engineering and blueprint vibes
-[Playerzero](https://playerzero.ai/) - Clean and minimal design
-[Revolut](https://www.revolut.com/) - Animations and transitions
-[Factory](https://factory.ai/) - Software vibes
+[AltiusLabs](https://www.altiuslabs.xyz/) - Inspiration for low fidelity drawings
+[MakingSoftware](https://www.makingsoftware.com/) - Steal the engineering and blueprint vibes
+[Playerzero](https://playerzero.ai/) - Inspiration for clean and minimal design for "starship manual concept"
+[Revolut](https://www.revolut.com/) - Inspiration for animations and transitions
+[Factory](https://factory.ai/) - Inspiration for software page when focusing on "starship manual concept"

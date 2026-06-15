@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/JustSergioPB/atelier/compare/atelier-v0.9.1...atelier-v0.9.2) (2026-06-15)
+
+
+### Bug Fixes
+
+* years of experience ([dfe6141](https://github.com/JustSergioPB/atelier/commit/dfe6141eae76722afcc1655ff2b48cabdf3cab96))
+
 ## [0.9.1](https://github.com/JustSergioPB/atelier/compare/atelier-v0.9.0...atelier-v0.9.1) (2026-06-14)
 
 

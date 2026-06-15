@@ -59,7 +59,7 @@ export const ui = {
         },
       ],
       stats: [
-        { value: "7+", label: "Years engineering" },
+        { value: "6+", label: "Years engineering" },
         { value: "Full-stack", label: "Front, back & mobile" },
         { value: "8+", label: "Production projects" },
       ],
@@ -330,7 +330,7 @@ export const ui = {
         },
       ],
       stats: [
-        { value: "7+", label: "Años de ingeniería" },
+        { value: "6+", label: "Años de ingeniería" },
         { value: "Full-stack", label: "Front, back y móvil" },
         { value: "8+", label: "Proyectos en producción" },
       ],

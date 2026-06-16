@@ -1482,6 +1482,13 @@ section {
    no longer a <section>. Trailing space is trimmed. */
 footer#contact {
   position: relative;
+  /* Own stacking context so z-index:-1 decorations (grid, diagrams) paint
+     above the band background but behind the content, not in front of it. */
+  isolation: isolate;
+  min-height: calc(100dvh - var(--header-h, 64px));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   /* Break out of the .page gutter so the band runs edge to edge, then re-align
      inner content with the gutter (same technique as #approach). */
   margin-inline: calc(50% - 50vw);
@@ -1597,7 +1604,8 @@ footer#contact {
   }
 }
 .contact-bar {
-  margin-top: var(--space-xl);
+  margin-top: auto;
+  padding-top: var(--space-xl);
   display: flex;
   justify-content: space-between;
   align-items: center;

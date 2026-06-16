@@ -16,7 +16,7 @@ const year = new Date().getFullYear();
 ---
 
 <footer id="contact">
-  <ContactActivityDiagram />
+  <canvas class="contact-grid" aria-hidden="true"></canvas>
   <h2 class="contact-title">{t.title}</h2>
   <p class="contact-lead">{t.lead}</p>
   <div class="hero-actions">
@@ -36,7 +36,117 @@ const year = new Date().getFullYear();
   </div>
 </footer>
 
+<script>
+  // Flickering grid (à la magicui) — decorative squares that randomly change
+  // opacity and pick a palette tone. Skipped under reduced-motion; canvas
+  // stays empty.
+  const canvas = document.querySelector<HTMLCanvasElement>("canvas.contact-grid");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (canvas && !reduce.matches) {
+    const ctx = canvas.getContext("2d")!;
+    const SQUARE = 6;
+    const GAP = 7;
+    const STEP = SQUARE + GAP;
+    const FLICKER = 0.1; // chance per second a square re-rolls its opacity
+    const MAX_OPACITY = 0.6;
+
+    // Resolve the band's monochrome palette tokens to "r,g,b" via a 1px probe.
+    // Read from the footer so the inverted-band overrides apply.
+    const host = canvas.closest("#contact") ?? document.documentElement;
+    const cs = getComputedStyle(host);
+    const probe = document.createElement("canvas").getContext("2d")!;
+    const toRGB = (color: string) => {
+      probe.fillStyle = color;
+      probe.fillRect(0, 0, 1, 1);
+      const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
+      return `${r},${g},${b}`;
+    };
+    const palette = [
+      "--color-text-primary",
+      "--color-text-secondary",
+      "--color-text-tertiary",
+      "--color-border",
+    ]
+      .map((v) => cs.getPropertyValue(v).trim())
+      .filter(Boolean)
+      .map(toRGB);
+    if (!palette.length) palette.push("255,255,255");
+
+    let cols = 0;
+    let rows = 0;
+    let squares = new Float32Array(0); // opacity per cell
+    let tones = new Uint8Array(0); // palette index per cell
+
+    const setup = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.ceil(w / STEP);
+      rows = Math.ceil(h / STEP);
+      squares = new Float32Array(cols * rows);
+      tones = new Uint8Array(cols * rows);
+      for (let i = 0; i < squares.length; i++) {
+        squares[i] = Math.random() * MAX_OPACITY;
+        tones[i] = Math.floor(Math.random() * palette.length);
+      }
+    };
+
+    setup();
+    new ResizeObserver(setup).observe(canvas);
+
+    let last = performance.now();
+    const frame = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+      for (let i = 0; i < squares.length; i++)
+        if (Math.random() < FLICKER * dt) {
+          squares[i] = Math.random() * MAX_OPACITY;
+          tones[i] = Math.floor(Math.random() * palette.length);
+        }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let x = 0; x < cols; x++)
+        for (let y = 0; y < rows; y++) {
+          const i = x * rows + y;
+          ctx.fillStyle = `rgba(${palette[tones[i]]},${squares[i]})`;
+          ctx.fillRect(x * STEP, y * STEP, SQUARE, SQUARE);
+        }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+</script>
+
 <style>
+  /* Decorative flickering grid — covers the footer, behind content. A straight
+     top-to-bottom fade: the grid is strongest at the top and clears downward,
+     so the centered pitch and the bottom contact-bar both read. */
+  .contact-grid {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 55%);
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 55%);
+  }
+
+  /* Center the contact pitch. Scoped overrides win over the global
+     .contact-title/.contact-lead rules (shared with Hero) on specificity. */
+  .contact-title,
+  .contact-lead {
+    margin-inline: auto;
+    text-align: center;
+  }
+  .hero-actions {
+    justify-content: center;
+  }
+
   /* Left column: meta line stacked over the copyright, both left-aligned */
   .contact-bar-meta {
     display: flex;

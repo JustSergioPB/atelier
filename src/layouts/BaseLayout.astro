@@ -48,14 +48,14 @@ const {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Load async so the font CSS doesn't block first paint; swaps to all once fetched. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap"
         rel="stylesheet"
       />
     </noscript>
@@ -93,7 +93,7 @@ const {
         });
         var selector =
           ".section-header, .about-lead, .about-body, .exp-item, .proj-card," +
-          " .approach-item, .ai-lead, .ai-item, .contact-lead," +
+          " .pt, .approach-item, .ai-lead, .ai-item, .contact-lead," +
           " #contact .hero-actions, .contact-bar";
         document.querySelectorAll(selector).forEach(function (el: Element) {
           el.classList.add("reveal");

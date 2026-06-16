@@ -39,11 +39,9 @@ export const ui = {
     },
     hero: {
       eyebrow: ["Ideate", "Build", "Ship"],
-      title: [
-        { text: "Software built to " },
-        { text: "last", mark: true },
-      ],
-      titleSpan: "Complete development, without cutting corners.",
+      title: "Build new or move forward.",
+      titleSpan:
+        "Production-grade software, engineered end to end — architecture, code, and delivery for new products and the systems already running.",
       byline: "Remote from Spain",
       ctaPrimary: "Get in touch",
       ctaSecondary: "LinkedIn",
@@ -51,22 +49,25 @@ export const ui = {
     about: {
       label: "About me",
       title: "From the database to the screen",
-      lead: [
-        { text: "I handle software " },
-        { text: "at every layer", mark: true },
-        {
-          text: " — from modeling the data and background services to polishing the user interface, applying the same engineering standards to every step.",
-        },
+      lead: "I handle software at every layer — from modeling the data and background services to polishing the user interface, applying the same engineering standards to every step.",
+      layers: [
+        { term: "UI", desc: "Web and native app" },
+        { term: "API", desc: "Backend app" },
+        { term: "DATA", desc: "Knowledge design" },
+        { term: "AI", desc: "Companion and analysis" },
+        { term: "CONCEPT", desc: "Feature, fix, idea" },
       ],
       stats: [
         { value: "6+", label: "Years engineering" },
-        { value: "Full-stack", label: "Front, back & mobile" },
+        { value: "100%", label: "Remote delivery" },
         { value: "8+", label: "Production projects" },
       ],
     },
     experience: {
       label: "Experience",
-      title: "Projects I've worked on",
+      title: "From problem to solution",
+      intro:
+        "Production software shipped — from real-time IoT platforms to ERP systems, SaaS products, and client sites — across front end, back end, and the infrastructure between, adapting to whatever each project demanded.",
       viewProject: "Visit site",
       seeAll: "See all projects",
       pageMeta: {
@@ -160,6 +161,12 @@ export const ui = {
           imageAlt: "Ciela — wedding planning SaaS",
         },
       ],
+    },
+    projectsTerminal: {
+      ariaList: "Projects",
+      navigate: "Navigate",
+      open: "Open",
+      entries: "entries",
     },
     approach: {
       label: "Approach",
@@ -310,11 +317,9 @@ export const ui = {
     },
     hero: {
       eyebrow: ["Idear", "Construir", "Desplegar"],
-      title: [
-        { text: "Software pensado para " },
-        { text: "durar", mark: true },
-      ],
-      titleSpan: "Desarrollo completo, sin dejar cabos sueltos.",
+      title: "Desde cero o hacia delante.",
+      titleSpan:
+        "Software listo para producción, construido end to end — arquitectura, código y despliegue, tanto para productos nuevos como para sistemas que ya están en marcha.",
       byline: "Remoto desde España",
       ctaPrimary: "Hablemos",
       ctaSecondary: "LinkedIn",
@@ -322,22 +327,25 @@ export const ui = {
     about: {
       label: "Sobre mí",
       title: "De la base de datos a la pantalla",
-      lead: [
-        { text: "Me encargo del software " },
-        { text: "en todas sus capas", mark: true },
-        {
-          text: ": desde modelar los datos y servicios de fondo hasta pulir la interfaz que ve el usuario, aplicando el mismo nivel de exigencia en cada paso.",
-        },
+      lead: "Me encargo del software en todas sus capas: desde modelar los datos y servicios de fondo hasta pulir la interfaz que ve el usuario, aplicando el mismo nivel de exigencia en cada paso.",
+      layers: [
+        { term: "UI", desc: "App web y nativa" },
+        { term: "API", desc: "App de backend" },
+        { term: "DATA", desc: "Diseño del conocimiento" },
+        { term: "AI", desc: "Copiloto y análisis" },
+        { term: "CONCEPT", desc: "Función, arreglo, idea" },
       ],
       stats: [
         { value: "6+", label: "Años de ingeniería" },
-        { value: "Full-stack", label: "Front, back y móvil" },
+        { value: "100%", label: "Trabajo remoto" },
         { value: "8+", label: "Proyectos en producción" },
       ],
     },
     experience: {
       label: "Experiencia",
-      title: "Proyectos en los que he trabajado",
+      title: "Del problema a la solución",
+      intro:
+        "Software llevado a producción —desde plataformas IoT en tiempo real hasta sistemas ERP, productos SaaS y webs para clientes—, de front a back y la infraestructura entre medias, adaptándome a lo que pedía cada proyecto.",
       viewProject: "Visitar web",
       seeAll: "Ver todos los proyectos",
       pageMeta: {
@@ -431,6 +439,12 @@ export const ui = {
           imageAlt: "Ciela — SaaS para organizar bodas",
         },
       ],
+    },
+    projectsTerminal: {
+      ariaList: "Proyectos",
+      navigate: "Navegar",
+      open: "Abrir",
+      entries: "entradas",
     },
     approach: {
       label: "Enfoque",

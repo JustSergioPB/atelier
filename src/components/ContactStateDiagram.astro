@@ -1,0 +1,42 @@
+---
+// Mobile-only UML state machine diagram (Idle → Active → Done → reset) in the
+// contact footer's top-left corner. Styled via `.contact-sm` in global.css.
+---
+
+<svg class="contact-sm" viewBox="0 0 440 210" fill="none" aria-hidden="true" focusable="false">
+  <!-- initial state -->
+  <circle class="uml-init" cx="38" cy="52" r="7" />
+  <line class="uml-edge" x1="45" y1="52" x2="76" y2="52" />
+  <path class="uml-arrow" d="M78 52 L67 47 L67 57 Z" />
+
+  <!-- state: Idle -->
+  <rect class="uml-state" x="78" y="30" width="120" height="44" rx="12" />
+  <text class="uml-name" x="138" y="57" text-anchor="middle">Idle</text>
+
+  <!-- Idle -> Active : start() -->
+  <line class="uml-edge" x1="198" y1="52" x2="284" y2="52" />
+  <path class="uml-arrow" d="M286 52 L275 47 L275 57 Z" />
+  <text class="uml-msg" x="242" y="44" text-anchor="middle">start()</text>
+
+  <!-- state: Active -->
+  <rect class="uml-state" x="286" y="30" width="130" height="44" rx="12" />
+  <text class="uml-name" x="351" y="57" text-anchor="middle">Active</text>
+
+  <!-- Active -> Done : finish() -->
+  <line class="uml-edge" x1="351" y1="74" x2="351" y2="138" />
+  <path class="uml-arrow" d="M351 140 L346 129 L356 129 Z" />
+  <text class="uml-msg" x="362" y="112" text-anchor="start">finish()</text>
+
+  <!-- state: Done -->
+  <rect class="uml-state" x="286" y="140" width="130" height="44" rx="12" />
+  <text class="uml-name" x="351" y="167" text-anchor="middle">Done</text>
+
+  <!-- Done -> final : reset() -->
+  <line class="uml-edge" x1="286" y1="162" x2="170" y2="162" />
+  <path class="uml-arrow" d="M168 162 L179 157 L179 167 Z" />
+  <text class="uml-msg" x="228" y="154" text-anchor="middle">reset()</text>
+
+  <!-- final state -->
+  <circle class="uml-final-ring" cx="150" cy="162" r="12" />
+  <circle class="uml-final-dot" cx="150" cy="162" r="6" />
+</svg>

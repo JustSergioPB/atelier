@@ -1,0 +1,61 @@
+---
+// Decorative "mission control" terminal — the hero showpiece (replaces the UML
+// sequence diagram). Purely presentational (aria-hidden), so the flavor text is
+// hardcoded like the old diagram labels rather than routed through i18n.
+// Styled via `.hero-term*` in global.css; monochrome panel + single pop accent.
+const tasks = [
+  { label: "architecture", done: true },
+  { label: "data-model", done: true },
+  { label: "api-layer", done: true },
+  { label: "interface", done: true },
+  { label: "test-suite", done: true },
+  { label: "deploy", done: false, active: true },
+];
+
+const log: [string, string][] = [
+  ["00:02", "spec accepted — scope locked"],
+  ["00:41", "data-model migrated"],
+  ["01:17", "api-layer green · 142 tests"],
+  ["02:48", "interface shipped"],
+  ["03:30", "build bundled · 0 errors"],
+];
+---
+
+<div class="hero-term" aria-hidden="true">
+  <div class="hero-term-bar">
+    <span class="hero-term-dots"><i></i><i></i><i></i></span>
+    <span class="hero-term-file">mission-control · foundry</span>
+    <span class="hero-term-status"><i></i>running</span>
+  </div>
+
+  <div class="hero-term-body">
+    <div class="hero-term-progress">
+      <span class="hero-term-progress-label">Deploy</span>
+      <span class="hero-term-track"><span class="hero-term-fill" style="width: 83%"></span></span>
+      <span class="hero-term-progress-count">5 / 6</span>
+    </div>
+
+    <div class="hero-term-section">
+      <p class="hero-term-head">// pipeline</p>
+      <ul class="hero-term-tasks">
+        {tasks.map((t) => (
+          <li class={t.active ? "is-active" : t.done ? "is-done" : ""}>
+            <span class="hero-term-check">{t.done ? "✓" : t.active ? "▸" : "·"}</span>
+            {t.label}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="hero-term-section">
+      <p class="hero-term-head">// log</p>
+      <ul class="hero-term-log">
+        {log.map(([time, msg]) => (
+          <li><span class="hero-term-time">{time}</span>{msg}</li>
+        ))}
+      </ul>
+    </div>
+
+    <p class="hero-term-prompt"><span class="hero-term-cmd">› ship --production</span><span class="hero-term-caret"></span></p>
+  </div>
+</div>

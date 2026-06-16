@@ -1,0 +1,233 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+import { getTranslations, resolveLang } from "../i18n/ui";
+import { joinMiddot } from "../separators";
+
+// Full-width interactive "project explorer" terminal. Combines professional
+// work (WORK/) and side projects (LABS/) into one keyboard-navigable list with
+// a detail pane. Progressive enhancement: the first entry's panel is rendered
+// open, the rest are toggled by the island script below.
+
+const lang = resolveLang(Astro.currentLocale);
+const exp = getTranslations(lang).experience;
+const proj = getTranslations(lang).projects;
+const t = getTranslations(lang).projectsTerminal;
+
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+// Disambiguate names that share a brand (e.g. two DEHN / two Evalua entries):
+// suffix each with the descriptor token that actually differs across the group,
+// so it works regardless of language word order → dehn-iot, evalua-saas.
+const brandGroups: Record<string, number[]> = {};
+exp.items.forEach((it, i) => {
+  const b = slug(it.meta[0]);
+  (brandGroups[b] ??= []).push(i);
+});
+const suffix: Record<number, string> = {};
+for (const idxs of Object.values(brandGroups)) {
+  if (idxs.length < 2) continue;
+  const tokens = idxs.map((i) => slug(exp.items[i].meta[1] ?? "").split("-").filter(Boolean));
+  const common = tokens[0].filter((tk) => tokens.every((t) => t.includes(tk)));
+  idxs.forEach((i, k) => {
+    const distinct = tokens[k].filter((tk) => !common.includes(tk));
+    suffix[i] = distinct[0] ?? tokens[k][0] ?? String(k + 1);
+  });
+}
+
+type Entry = {
+  group: "work" | "labs";
+  name: string;
+  descriptor: string;
+  eyebrow: string;
+  title: string;
+  desc: string;
+  tags: readonly string[];
+  link?: string;
+  linkLabel: string;
+  soon?: string;
+};
+
+const work: Entry[] = exp.items.map((it, i) => ({
+  group: "work",
+  name: suffix[i] ? `${slug(it.meta[0])}-${suffix[i]}` : slug(it.meta[0]),
+  descriptor: it.meta[1] ?? it.meta[0],
+  eyebrow: joinMiddot(it.meta),
+  title: it.title,
+  desc: it.desc,
+  tags: it.tags,
+  link: it.link,
+  linkLabel: exp.viewProject,
+}));
+
+const labs: Entry[] = proj.items.map((it) => ({
+  group: "labs",
+  name: slug(it.title),
+  descriptor: it.chipLabel,
+  eyebrow: joinMiddot([it.chipLabel, it.year]),
+  title: it.title,
+  desc: it.desc,
+  tags: it.tags,
+  link: it.link,
+  linkLabel: proj.viewProject,
+  soon: it.link ? undefined : proj.comingSoon,
+}));
+
+const entries = [...work, ...labs];
+// Safety net: guarantee unique names even if the smart suffixing collides.
+const used = new Set<string>();
+for (const e of entries) {
+  let n = e.name;
+  let c = 2;
+  while (used.has(n)) n = `${e.name}-${c++}`;
+  used.add(n);
+  e.name = n;
+}
+
+const groups = [
+  { key: "work", caption: exp.label, items: work },
+  { key: "labs", caption: proj.label, items: labs, anchor: "projects" },
+] as const;
+
+// Stable index across both groups so the list and panels stay in sync.
+const indexOf = (e: Entry) => entries.indexOf(e);
+---
+
+<section id="experience">
+  <SectionHeader title={exp.title} subtitle={exp.intro} center />
+
+  <div class="pt" data-project-terminal>
+    <div class="pt-bar">
+      <span class="pt-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="pt-path">~/projects</span>
+      <span class="pt-hint">
+        <span class="pt-key"><kbd>↑</kbd><kbd>↓</kbd> {t.navigate}</span>
+        <span class="pt-key"><kbd>⏎</kbd> {t.open}</span>
+      </span>
+      <span class="pt-count">{entries.length} {t.entries}</span>
+    </div>
+
+    <div class="pt-body">
+      <div class="pt-list" role="listbox" aria-label={t.ariaList} tabindex="-1">
+        {groups.map((g) => (
+          <div class="pt-group" role="group" aria-label={g.caption} id={"anchor" in g ? g.anchor : undefined}>
+            <p class="pt-group-head">{g.key}/</p>
+            {g.items.map((e) => {
+              const i = indexOf(e);
+              return (
+                <button
+                  type="button"
+                  class="pt-opt"
+                  role="option"
+                  id={`pt-opt-${i}`}
+                  aria-selected={i === 0 ? "true" : "false"}
+                  aria-controls={`pt-panel-${i}`}
+                  tabindex={i === 0 ? 0 : -1}
+                  data-index={i}
+                  data-href={e.link}
+                >
+                  <span class="pt-opt-name">{e.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      <div class="pt-detail">
+        {entries.map((e, i) => (
+          <article class="pt-panel" id={`pt-panel-${i}`} aria-label={e.title} hidden={i !== 0}>
+            <p class="pt-cmd" aria-hidden="true">
+              <span class="pt-cmd-text">cat {e.group}/{e.name}.md</span>
+              <span class="pt-caret"></span>
+            </p>
+            <h3 class="pt-title">{e.title}</h3>
+            <p class="pt-eyebrow">{e.eyebrow}</p>
+            <p class="pt-desc">{e.desc}</p>
+            <p class="pt-tags">
+              {e.tags.map((tag) => (
+                <span class="pt-tag">{tag}</span>
+              ))}
+            </p>
+            <div class="pt-panel-foot">
+              {e.link ? (
+                <a class="pt-link" href={e.link} target="_blank" rel="noopener">
+                  {e.linkLabel}
+                </a>
+              ) : (
+                <span class="pt-soon">{e.soon}</span>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    document.querySelectorAll<HTMLElement>("[data-project-terminal]").forEach(function (root) {
+      var opts = Array.prototype.slice.call(
+        root.querySelectorAll<HTMLButtonElement>(".pt-opt")
+      ) as HTMLButtonElement[];
+      var panels = Array.prototype.slice.call(
+        root.querySelectorAll<HTMLElement>(".pt-panel")
+      ) as HTMLElement[];
+      if (!opts.length) return;
+
+      var current = 0;
+
+      function select(idx: number, focus: boolean) {
+        idx = Math.max(0, Math.min(opts.length - 1, idx));
+        current = idx;
+        opts.forEach(function (o, i) {
+          var on = i === idx;
+          o.setAttribute("aria-selected", on ? "true" : "false");
+          o.tabIndex = on ? 0 : -1;
+        });
+        panels.forEach(function (p, i) {
+          p.hidden = i !== idx;
+        });
+        var active = opts[idx];
+        if (focus) active.focus();
+        active.scrollIntoView({ block: "nearest" });
+      }
+
+      opts.forEach(function (o, i) {
+        o.addEventListener("click", function () {
+          select(i, true);
+        });
+      });
+
+      root.querySelector(".pt-list")!.addEventListener("keydown", function (ev: Event) {
+        var e = ev as KeyboardEvent;
+        var k = e.key;
+        if (k === "ArrowDown" || k === "j") {
+          e.preventDefault();
+          select(current + 1, true);
+        } else if (k === "ArrowUp" || k === "k") {
+          e.preventDefault();
+          select(current - 1, true);
+        } else if (k === "Home") {
+          e.preventDefault();
+          select(0, true);
+        } else if (k === "End") {
+          e.preventDefault();
+          select(opts.length - 1, true);
+        } else if (k === "Enter" || k === " ") {
+          var href = opts[current].getAttribute("data-href");
+          if (href) {
+            e.preventDefault();
+            window.open(href, "_blank", "noopener");
+          }
+        }
+      });
+    });
+  })();
+</script>

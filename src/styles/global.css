@@ -19,7 +19,7 @@
   --_light-700: #2a2a2a;
   --_light-900: #0f0f0f;
 
-  --t-display: clamp(3rem, 9vw, 7.5rem);
+  --t-display: clamp(2rem, 5.5vw, 4.75rem);
   --t-headline: clamp(2.25rem, 5vw, 4.25rem);
   --t-subhead: clamp(1rem, 1.6vw, 1.25rem);
   --t-body: 0.9375rem;
@@ -134,28 +134,16 @@ a {
    LAYOUT
 ───────────────────────────────────────── */
 .page {
-  max-width: 1100px;
-  margin: 0 auto;
+  /* Full-bleed like the header so section content lines up with the logo/nav
+     gutter (var(--space-m)) instead of an inset 1100px column. */
   padding: var(--space-m) var(--space-m);
 }
 
 section {
-  padding: var(--space-xl) 0;
+  padding: var(--space-l) 0;
   position: relative;
   /* Clear the sticky header when jumped to via an anchor link. */
   scroll-margin-top: 72px;
-}
-
-section:not(:first-of-type)::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  opacity: 0.5;
-  background: var(--color-accent);
-  transform-origin: left center;
 }
 
 /* ─────────────────────────────────────────
@@ -186,41 +174,11 @@ section:not(:first-of-type)::before {
 .motion .proj-card:nth-child(2).is-visible { transition-delay: 0.08s; }
 .motion .proj-card:nth-child(3).is-visible { transition-delay: 0.16s; }
 
-/* Section rule draws in from the left */
-.motion section:not(:first-of-type)::before { transform: scaleX(0); }
-.motion section.is-visible::before {
-  transform: scaleX(1);
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 /* ─────────────────────────────────────────
    MICRO-ANIMATIONS (ambient/idle loops — gated on .motion)
 ───────────────────────────────────────── */
 
-/* #1 Red accents get a slow lighter-red shimmer sweeping across the glyphs */
-@keyframes accent-shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-.motion .hl,
-.motion .accent {
-  background: linear-gradient(
-    100deg,
-    var(--color-pop) 0%,
-    var(--color-pop) 38%,
-    #ff7184 50%,
-    var(--color-pop) 62%,
-    var(--color-pop) 100%
-  );
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: accent-shimmer 6s linear infinite;
-}
-
-/* #2 Primary CTA arrow breathes to the right */
+/* #1 Primary CTA arrow breathes to the right */
 @keyframes cta-arrow {
   0%, 100% { transform: translateX(0); }
   50%      { transform: translateX(3px); }
@@ -264,6 +222,21 @@ section:not(:first-of-type)::before {
   color: var(--color-text-primary);
 }
 
+.section-subtitle {
+  font-family: "Inter", sans-serif;
+  font-size: var(--t-subhead);
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-s);
+  max-width: 60ch;
+}
+
+/* Centered variant — used where the section header leads the band. */
+.section-header.is-centered { justify-content: center; text-align: center; }
+.section-header.is-centered .section-header-content { flex: 0 1 auto; }
+.section-header.is-centered .section-subtitle { margin-inline: auto; }
+
 /* ─────────────────────────────────────────
    HERO
 ───────────────────────────────────────── */
@@ -273,14 +246,21 @@ section:not(:first-of-type)::before {
   border-top: none;
   /* Fill the viewport below the sticky header. Subtract the measured header
      height (--header-h, set by Header.astro) and the .page top padding so the
-     hero's bottom lands at the fold. Content is centered in the leftover space. */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+     hero's bottom lands at the fold. Copy and terminal are centered in the
+     leftover space, side by side on wide screens. */
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(var(--space-m), 5vw, var(--space-xl));
   min-height: calc(100dvh - var(--header-h, 64px) - var(--space-l));
-  /* Clip the background diagram where it bleeds past the hero (prevents
+  /* Clip the terminal's drop shadow where it bleeds past the hero (prevents
      horizontal overflow on mobile). */
   overflow: hidden;
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
 }
 
 .about-wrap {
@@ -316,14 +296,6 @@ section:not(:first-of-type)::before {
   pointer-events: none;
   opacity: 0.16;
   color: var(--color-text-tertiary);
-  /* Fade toward the text (left + top) so the diagram stays in its corner
-     and doesn't compete with the hero copy. */
-  -webkit-mask-image: linear-gradient(to left, #000 38%, transparent 92%),
-                      linear-gradient(to top, #000 70%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to left, #000 38%, transparent 92%),
-              linear-gradient(to top, #000 70%, transparent 100%);
-  mask-composite: intersect;
 }
 
 .hero-uml .uml-class rect { stroke: currentColor; stroke-width: 1; }
@@ -389,40 +361,169 @@ section:not(:first-of-type)::before {
   }
 }
 
-.hero-eyebrow {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: var(--t-label);
-  font-weight: 500;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  margin-bottom: var(--space-m);
+/* ─────────────────────────────────────────
+   HERO — MISSION-CONTROL TERMINAL
+───────────────────────────────────────── */
+.hero-term {
+  font-family: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  width: 100%;
+  max-width: 720px;
+  justify-self: end;
+  /* Raised panel — lifts off the page background for contrast. */
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+  font-size: var(--t-caption);
+  line-height: 1.7;
 }
 
-.hero-title {
+/* Title bar — traffic-light dots, file label, live status. */
+.hero-term-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: none;
+  border-bottom: 1px solid var(--color-border);
+}
+.hero-term-dots { display: inline-flex; gap: 6px; flex: 0 0 auto; }
+.hero-term-dots i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--color-text-tertiary); }
+.hero-term-dots i:first-child { border-color: var(--color-pop); }
+
+.hero-term-file {
+  flex: 1;
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hero-term-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  font-size: var(--t-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-pop);
+}
+.hero-term-status i { width: 7px; height: 7px; border-radius: 50%; background: var(--color-pop); }
+.motion .hero-term-status i { animation: hero-term-pulse 1.6s ease-in-out infinite; }
+@keyframes hero-term-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.hero-term-body { padding: var(--space-s) var(--space-m) var(--space-m); }
+
+/* Deploy progress bar. */
+.hero-term-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: var(--space-m);
+}
+.hero-term-progress-label,
+.hero-term-progress-count {
+  flex: 0 0 auto;
+  font-size: var(--t-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.hero-term-progress-count { color: var(--color-pop); }
+.hero-term-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 2px;
+  background: none;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+.hero-term-fill { display: block; height: 100%; background: var(--color-pop); }
+
+.hero-term-section { margin-bottom: var(--space-m); }
+.hero-term-section:last-of-type { margin-bottom: var(--space-s); }
+.hero-term-head {
+  font-size: var(--t-label);
+  letter-spacing: 0.12em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-xs);
+}
+
+.hero-term-tasks,
+.hero-term-log { list-style: none; }
+
+.hero-term-tasks li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--color-text-tertiary);
+}
+.hero-term-tasks li.is-active { color: var(--color-text-primary); }
+.hero-term-check { flex: 0 0 auto; width: 1ch; color: var(--color-text-tertiary); }
+.hero-term-tasks li.is-done .hero-term-check,
+.hero-term-tasks li.is-active .hero-term-check { color: var(--color-pop); }
+
+.hero-term-log li {
+  display: flex;
+  gap: 12px;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hero-term-time { flex: 0 0 auto; color: var(--color-text-secondary); }
+
+.hero-term-prompt {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-s);
+}
+.hero-term-cmd { color: var(--color-text-primary); }
+.hero-term-caret {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  margin-left: 6px;
+  background: var(--color-pop);
+  transform: translateY(2px);
+}
+.motion .hero-term-caret { animation: hero-term-blink 1.1s steps(1) infinite; }
+@keyframes hero-term-blink { 50% { opacity: 0; } }
+
+@media (max-width: 720px) {
+  .hero-term-body { padding: var(--space-s) var(--space-s) var(--space-s); }
+}
+
+.hero-title,
+.contact-title {
   font-family: "Space Grotesk", sans-serif;
   font-size: var(--t-display);
   font-weight: 800;
   line-height: 0.88;
   letter-spacing: -0.05em;
   color: var(--color-text-primary);
-  margin-bottom: var(--space-m);
   /* Keep the copy off the right side on wide screens so it doesn't run into
      the background diagram. */
   max-width: min(100%, 10ch);
 }
 
-.hero-title span { max-width: 22ch; }
-
-.hero-title .hl { color: var(--color-pop); font-weight: inherit; }
-
-.hero-title span {
-  display: block;
-  font-weight: 300;
-  color: var(--color-text-tertiary);
+/* Subtitle: its own sibling tag (not part of the <h1>). A value statement, so
+   it's sized as a readable deck rather than a display-scale tagline. */
+.hero-subtitle,
+.contact-lead {
+  max-width: 52ch;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 400;
+  color: var(--color-text-secondary);
   letter-spacing: -0.01em;
-  font-size: 0.36em;
-  margin-top: 0.5em;
+  line-height: 1.5;
+  font-size: var(--t-subhead);
+  margin-top: var(--space-m);
+  margin-bottom: var(--space-m);
 }
 
 .hero-byline {
@@ -432,7 +533,7 @@ section:not(:first-of-type)::before {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-text-tertiary);
-  margin-bottom: var(--space-l);
+  margin-bottom: var(--space-m);
 }
 
 .hero-byline strong { color: var(--color-text-secondary); font-weight: 600; }
@@ -508,23 +609,24 @@ section:not(:first-of-type)::before {
 /* ─────────────────────────────────────────
    ABOUT
 ───────────────────────────────────────── */
+/* Lead reads as the section description — same treatment as .section-subtitle */
 .about-lead {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  font-weight: 400;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  color: var(--color-text-primary);
-  max-width: 760px;
+  font-family: "Inter", sans-serif;
+  font-size: var(--t-subhead);
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--color-text-tertiary);
+  max-width: 60ch;
   margin-bottom: var(--space-m);
 }
 
 .about-lead .accent { color: var(--color-pop); font-weight: 600; }
 
-/* Stats read like a spec sheet — a top rule per figure, tight Grotesk numerals */
+/* Stats read like a spec sheet — a top rule per figure, tight Grotesk numerals.
+   Stacked in a single column. */
 .about-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--space-m);
   max-width: 760px;
 }
@@ -552,47 +654,43 @@ section:not(:first-of-type)::before {
   color: var(--color-text-tertiary);
 }
 
-/* Isometric stacking-layers diagram — decorative bg, anchored bottom-right
-   behind the About copy. Faded toward the text (left + top) like the UML art. */
-#about { overflow: hidden; }
+/* Isometric stacking-layers diagram — inline between the lead and the stats. */
 .about-layers {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: clamp(360px, 44vw, 560px);
+  display: block;
+  width: clamp(320px, 80vw, 480px);
   height: auto;
-  z-index: -1;
+  margin: var(--space-l) auto;
   pointer-events: none;
-  opacity: 0.5;
   color: var(--color-text-tertiary);
   filter: saturate(1.25);
   overflow: visible;
-  /* Fade toward the text (left) and soften both vertical edges so the
-     centered diagram blends into the section. */
-  -webkit-mask-image: linear-gradient(to left, #000 45%, transparent 95%),
-                      linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to left, #000 45%, transparent 95%),
-              linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
-  mask-composite: intersect;
+}
+/* The stack itself reads quiet; the captions sit at full strength. */
+.about-stack { opacity: 0.7; }
+
+/* Laptops and up: lay the section out as a row — text · diagram · stats. */
+@media (min-width: 1024px) {
+  .about-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-l);
+    max-width: none;
+  }
+  .about-text { flex: 0 1 460px; min-width: 0; }
+  .about-lead { margin-bottom: 0; }
+  .about-layers { margin: 0; flex: 0 0 auto; width: clamp(460px, 46vw, 660px); }
+  .about-stats { flex: 0 0 auto; width: max-content; }
 }
 
 @media (max-width: 1024px) {
-  /* Drop to the bottom-right corner — vertical centering crowds the copy on
-     tablets + mobile. Anchor it level with the last stat instead. */
-  .about-layers {
-    top: auto;
-    bottom: 0;
-    transform: none;
+  /* Stack the copy over the terminal, anchored to the top of the fold. */
+  .hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: var(--space-l);
   }
-}
-
-@media (max-width: 720px) {
-  .about-layers {
-    width: 78vw;
-    opacity: 0.32;
-  }
+  .hero-term { justify-self: stretch; max-width: 520px; }
 }
 
 /* Top face = surface; thickness side = raised surface — reads as a solid sheet */
@@ -618,6 +716,46 @@ section:not(:first-of-type)::before {
   opacity: 0.7;
 }
 
+/* Per-layer glyph — a line icon laid flat on the sheet's isometric top face
+   (sheared via a matrix in the markup). Stroke is pre-divided by the ~1.55×
+   matrix scale so it renders at the same weight as the sheet outlines. */
+.about-icon {
+  fill: none;
+  stroke: var(--color-text-secondary);
+  stroke-width: 0.85;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.about-icon-dot { fill: var(--color-text-secondary); stroke: none; }
+/* UI glyph carries the pop accent, matching its sheet */
+.about-icon--accent { stroke: var(--color-pop); }
+.about-icon--accent .about-icon-dot { fill: var(--color-pop); }
+
+/* AI is dashed like the concept footprint — the non-tangible layers */
+.about-lyr--ai .about-lyr-face,
+.about-lyr--ai .about-lyr-side {
+  fill: none;
+  stroke-dasharray: 5 6;
+  opacity: 0.7;
+}
+
+/* Leader lines + captions — instruction-manual annotation, full strength */
+.about-cap-line { fill: none; stroke: var(--color-text-tertiary); stroke-width: 1; stroke-linejoin: round; }
+.about-cap-node { fill: var(--color-text-tertiary); stroke: none; }
+.about-cap-term {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  fill: var(--color-text-primary);
+}
+.about-cap-desc {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  fill: var(--color-text-tertiary);
+}
+
 /* Top sheet carries the pop accent (like the highlighted layer in the ref) */
 .about-lyr--top .about-lyr-face {
   stroke: var(--color-pop);
@@ -629,20 +767,6 @@ section:not(:first-of-type)::before {
   fill: var(--color-pop);
   fill-opacity: 0.2;
 }
-
-/* Layers breathe apart, then recompress — an idle "stacking" loop.
-   Same phase, different amplitude → gentle accordion. Footprint stays put. */
-@keyframes about-stack {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(var(--lift, 0)); }
-}
-.motion .about-lyr {
-  animation: about-stack 4.2s ease-in-out infinite;
-  will-change: transform;
-}
-.motion .about-lyr--top { --lift: -14px; animation-delay: -0.2s; }
-.motion .about-lyr--mid { --lift: -6px; }
-.motion .about-lyr--base { --lift: 0px; }
 
 /* ─────────────────────────────────────────
    EXPERIENCE
@@ -814,7 +938,7 @@ section:not(:first-of-type)::before {
   margin-inline: calc(50% - 50vw);
   /* Re-align inner content with the page gutter on wide viewports */
   padding-inline: max(var(--space-m), calc(50vw - 550px + var(--space-m)));
-  padding-block: var(--space-xl);
+  padding-block: var(--space-l);
   background: var(--inv-bg);
   color: var(--inv-text-secondary);
   transition: background 0.25s ease, color 0.25s ease;
@@ -1350,25 +1474,30 @@ section:not(:first-of-type)::before {
 /* ─────────────────────────────────────────
    CONTACT
 ───────────────────────────────────────── */
-.contact-lead {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  font-weight: 400;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  color: var(--color-text-primary);
-  max-width: 760px;
-  margin-bottom: var(--space-m);
-}
 
 /* ─────────────────────────────────────────
    FOOTER (the contact block closes the page, so it's the <footer>)
 ───────────────────────────────────────── */
-/* Carry the same spacing, anchor offset and top hairline the <section>s get,
-   since this is no longer a <section>. Trailing space is trimmed. */
+/* Carry the same spacing and anchor offset the <section>s get, since this is
+   no longer a <section>. Trailing space is trimmed. */
 footer#contact {
   position: relative;
-  padding: var(--space-xl) 0 0;
+  /* Break out of the .page gutter so the band runs edge to edge, then re-align
+     inner content with the gutter (same technique as #approach). */
+  margin-inline: calc(50% - 50vw);
+  /* Also escape the .page bottom padding so no body-bg strip shows below. */
+  margin-bottom: calc(-1 * var(--space-m));
+  padding-inline: var(--space-m);
+  padding-block: var(--space-xl) var(--space-m);
+  /* Same inverted band as #approach — remap the consumed tokens locally so the
+     whole subtree (title, lead, bar, diagram, ghost button) flips contrast. */
+  background: var(--inv-bg);
+  --color-bg: var(--inv-bg);
+  --color-surface: var(--inv-surface);
+  --color-border: var(--inv-border);
+  --color-text-primary: var(--inv-text-primary);
+  --color-text-secondary: var(--inv-text-secondary);
+  --color-text-tertiary: var(--inv-text-tertiary);
   scroll-margin-top: 72px;
   /* Clip the decorative diagrams where they bleed past the footer edges
      (prevents horizontal overflow on mobile). */
@@ -1467,23 +1596,6 @@ footer#contact {
     mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
   }
 }
-footer#contact::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  opacity: 0.5;
-  background: var(--color-accent);
-  transform-origin: left center;
-}
-.motion footer#contact::before { transform: scaleX(0); }
-.motion footer#contact.is-visible::before {
-  transform: scaleX(1);
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 .contact-bar {
   margin-top: var(--space-xl);
   display: flex;
@@ -1513,4 +1625,215 @@ a.contact-bar-text:focus-visible { outline: 2px solid var(--color-pop); outline-
 
   /* Stats stack into a single spec column on small screens */
   .about-stats { grid-template-columns: 1fr; gap: var(--space-s); }
+}
+
+/* ─────────────────────────────────────────
+   PROJECT TERMINAL (interactive work + labs browser)
+───────────────────────────────────────── */
+.pt {
+  font-family: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  /* Full-bleed band: break out of the .page gutter, edge to edge. */
+  margin-inline: calc(50% - 50vw);
+  /* Raised panel — lifts off the page background for contrast. */
+  background: var(--color-surface);
+  border-block: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+/* Title bar. Inner regions are padded to the page gutter so their content
+   lines up with the section header above the full-bleed frame. */
+.pt-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--space-s) var(--space-m);
+  background: none;
+  border-bottom: 1px solid var(--color-border);
+}
+.pt-dots { display: inline-flex; gap: 6px; flex: 0 0 auto; }
+.pt-dots i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--color-text-tertiary); }
+.pt-dots i:first-child { border-color: var(--color-pop); }
+.pt-path {
+  flex: 1;
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.pt-count {
+  flex: 0 0 auto;
+  font-size: var(--t-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* Two-pane body: list | detail */
+.pt-body {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  height: clamp(420px, 60vh, 600px);
+}
+
+/* List (left) */
+.pt-list {
+  overflow-y: auto;
+  border-right: 1px solid var(--color-border);
+  padding: var(--space-s) 0;
+  outline: none;
+}
+.pt-group { scroll-margin-top: 80px; }
+.pt-group + .pt-group { margin-top: var(--space-s); }
+.pt-group-head {
+  padding: var(--space-xs) var(--space-m) 6px;
+  color: var(--color-pop);
+}
+
+.pt-opt {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 7px var(--space-m) 7px calc(var(--space-m) + 22px);
+  background: none;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  transition: background 0.12s ease, color 0.12s ease;
+}
+/* CSS-drawn tree: continuous vertical spine + per-row horizontal tick. */
+.pt-opt::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--space-m) + 2px);
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid var(--color-text-tertiary);
+}
+.pt-opt:last-child::before { bottom: 50%; }
+.pt-opt::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--space-m) + 2px);
+  top: 50%;
+  width: 11px;
+  border-top: 1px solid var(--color-text-tertiary);
+}
+.pt-opt:hover .pt-opt-name { color: var(--color-text-primary); }
+.pt-opt-name { color: var(--color-text-secondary); }
+/* Selected row inverts to a full pop-color bar, like a terminal cursor line. */
+.pt-opt[aria-selected="true"] { background: var(--color-pop); }
+.pt-opt[aria-selected="true"] .pt-opt-name { color: #fff; }
+.pt-opt[aria-selected="true"]::before,
+.pt-opt[aria-selected="true"]::after { border-color: #fff; }
+.pt-opt:focus-visible { outline: 2px solid var(--color-pop); outline-offset: -2px; }
+
+/* Detail (right) */
+.pt-detail { overflow-y: auto; padding: var(--space-m); }
+.pt-cmd {
+  display: flex;
+  align-items: center;
+  font-size: var(--t-caption);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-m);
+}
+.pt-cmd-text::before { content: "$ "; color: var(--color-pop); }
+.pt-caret {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  margin-left: 6px;
+  background: var(--color-pop);
+  transform: translateY(2px);
+}
+.motion .pt-caret { animation: hero-term-blink 1.1s steps(1) infinite; }
+
+/* Detail content reads like `cat file.md` output: monospace, plain text. */
+.pt-title {
+  font-size: var(--t-subhead);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+.pt-title::before { content: "# "; color: var(--color-pop); }
+.pt-eyebrow {
+  font-size: var(--t-caption);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-m);
+}
+.pt-eyebrow::before { content: "// "; }
+.pt-desc {
+  font-size: var(--t-caption);
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  max-width: 70ch;
+  margin-bottom: var(--space-m);
+}
+.pt-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: var(--t-caption);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-m);
+}
+.pt-tag::before { content: "#"; color: var(--color-pop); }
+.pt-link {
+  font: inherit;
+  color: var(--color-pop);
+  text-decoration: none;
+}
+.pt-link::before { content: "→ "; }
+.pt-link:hover { text-decoration: underline; }
+.pt-soon { font-size: var(--t-caption); color: var(--color-text-tertiary); }
+.pt-soon::before { content: "// "; }
+
+/* Keyboard hints — live inside the title bar, not a separate bottom bar. */
+.pt-hint {
+  display: inline-flex;
+  gap: var(--space-m);
+  margin-right: var(--space-m);
+  font-size: var(--t-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.pt-key { display: inline-flex; align-items: center; gap: 8px; }
+.pt-key kbd {
+  font-family: inherit;
+  font-size: var(--t-label);
+  line-height: 1;
+  color: var(--color-text-secondary);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+/* Laptop and up: stop the full-bleed band, center a 4:3 panel instead. */
+@media (min-width: 1024px) {
+  .pt {
+    margin-inline: auto;
+    max-width: 880px;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+  }
+  .pt-body { height: auto; flex: 1; min-height: 0; }
+}
+
+/* Stack to a single column on narrow screens: list above, detail below. */
+@media (max-width: 760px) {
+  .pt-body { grid-template-columns: 1fr; height: auto; }
+  .pt-list {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+    max-height: 240px;
+  }
+  /* No physical keyboard on touch — drop the hint to declutter the bar. */
+  .pt-hint { display: none; }
 }

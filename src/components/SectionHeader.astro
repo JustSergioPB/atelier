@@ -2,16 +2,19 @@
 interface Props {
   // Accepted for backward-compatibility with callers; no longer rendered.
   num?: string;
-  label: string;
+  label?: string;
   title: string;
+  subtitle?: string;
+  center?: boolean;
 }
 
-const { label, title } = Astro.props;
+const { label, title, subtitle, center } = Astro.props;
 ---
 
-<div class="section-header">
+<div class:list={["section-header", { "is-centered": center }]}>
   <div class="section-header-content">
-    <p class="section-label">{label}</p>
+    {label && <p class="section-label">{label}</p>}
     <h2 class="section-title">{title}</h2>
+    {subtitle && <p class="section-subtitle">{subtitle}</p>}
   </div>
 </div>

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.0](https://github.com/JustSergioPB/atelier/compare/atelier-v0.9.2...atelier-v0.10.0) (2026-06-16)
+
+
+### Features
+
+* polished footer ([ae169db](https://github.com/JustSergioPB/atelier/commit/ae169db19b3556d767c2588f86f8184030657f99))
+* re-work for hero, about, experince and contact ([579afaa](https://github.com/JustSergioPB/atelier/commit/579afaa200bb0e0200f38806225fd7730cd317fa))
+
 ## [0.9.2](https://github.com/JustSergioPB/atelier/compare/atelier-v0.9.1...atelier-v0.9.2) (2026-06-15)
 
 
